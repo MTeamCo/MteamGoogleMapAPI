@@ -1,0 +1,6 @@
+در حال حاظر بهترن راه پیدا شده استفاده از کد های جاوااسکریپت و لود آن در استیج وب ویو می باشد
+نمونه لینک های جاوااز کد بیس با استایل ها و موقیت مکانی در سایت گوگل دولوپر:
+https://developers.google.com/maps/documentation/javascript/?csw=1
+
+نمونه دیگر از اجرای  کد های جواسکریپت و مراحل اضافه کردن کدهای دیگر
+https://developers.google.com/maps/documentation/javascript/tutorial

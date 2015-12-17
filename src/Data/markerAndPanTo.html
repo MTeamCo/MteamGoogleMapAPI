@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { 
+		height: 100%;
+		margin: 0;
+		padding: 0; 
+		}
+      #map {
+		height: 100%; 
+	  }
+
+    </style>
+  </head>
+
+  <body>
+   <div id="map"></div>
+ <script type="text/javascript">
+var map
+var markers = [];
+var pointArray = [];
+var intM=false
+var paramsObj
+
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var labelIndex = 0;
+var addLable
+function setMarker(Marker_p)
+{
+	if(!paramsObj.showAllMarker)
+	{
+		setMapOnAll(null);
+		markers = [];
+	}
+	
+	var marker = new google.maps.Marker({
+	map: map,
+    position: Marker_p,
+	label: addLable,
+	title: Marker_p.title
+  });
+  markers.push(marker);
+  
+  if(paramsObj.backToMarker>-1)
+  {
+	map.addListener('center_changed', function() {
+		// 3 seconds after the center of the map has changed, pan back to the
+		// marker.
+	window.setTimeout(function() {
+		 map.panTo(marker.getPosition());
+		}, paramsObj.backToMarker);
+	});
+  }
+  if(paramsObj.zoomOnSelectMarker>-1)
+  {
+	marker.addListener('click', function() {
+		map.setZoom(paramsObj.zoomOnSelectMarker);
+		map.setCenter(marker.getPosition());
+		sendMarkerListByeSeletor(Marker_p)
+		//////////////////////////////////////////////////////////
+	});
+	}
+}
+
+
+function label(loaction)
+{
+	if(paramsObj.outLabel)
+	{
+		addLable = labels[labelIndex++ % labels.length]
+	}
+	else
+	{
+		addLable = loaction.label
+	}
+}
+function setMap(params) {
+	paramsObj = params
+	pointArray = paramsObj.location
+}
+function runMap()
+{
+	if(paramsObj.sendBtnUrlImage!=null)
+	{
+		document.getElementById("btn").style.backgroundImage="url("+paramsObj.sendBtnUrlImage+")";
+		document.getElementById("btn").style.backgroundRepeat="no-repeat";
+		document.getElementById("btn").style.backgroundPosition="center";
+		document.getElementById("btn").style.position = "absolute";
+				
+		document.getElementById("btn").style.top=paramsObj.sendBtnY+"px"
+		document.getElementById("btn").style.left =paramsObj.sendBtnX+"px"
+		
+			document.getElementById("btn").style.width=paramsObj.sendBtnWidth+"px"
+		document.getElementById("btn").style.height=paramsObj.sendBtnHeight+"px"
+	
+		document.getElementById("btn").style.backgroundSize = paramsObj.sendBtnWidth+"px "+paramsObj.sendBtnHeight+"px";
+	}
+
+	
+	var mapTypeId
+	if(paramsObj.mapTypeId == "SATELLITE")
+	{
+		mapTypeId = google.maps.MapTypeId.SATELLITE
+	}
+	if(paramsObj.mapTypeId=="MAP")
+	{
+		mapTypeId = google.maps.MapTypeId.MAP
+	}
+	if(paramsObj.location.length>0)
+	{
+		//alert(paramsObj.location.length)
+		var myLatLng = paramsObj.location[paramsObj.location.length-1]//{lat: paramsObj.lat, lng: paramsObj.lng};
+		
+		
+	  // Create a map object and specify the DOM element for display.
+		map = new google.maps.Map(document.getElementById('map'), {
+		center: myLatLng,scrollwheel: paramsObj.scrollwheel,zoom: paramsObj.zoom,mapTypeId:mapTypeId});
+	}
+
+		
+	if(paramsObj.marker)
+	 {
+		
+		for (i=0;i<paramsObj.location.length;i++) 
+		{
+			
+			label(paramsObj.location[i])
+			setMarker(paramsObj.location[i])
+			
+			
+		}
+	 }
+	
+	map.addListener('click', function(e) 
+	{
+		placeMarkerAndPanTo(e.latLng);	
+	});  
+
+}
+function placeMarkerAndPanTo(loaction) 
+{
+	label(loaction)
+	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:''}
+	 pointArray.push(newMarker)
+	if(paramsObj.markerAndPanTo)
+	{
+		setMarker(newMarker)
+	}
+	
+	
+  if(paramsObj.panTo)
+  {
+	 map.panTo(loaction);
+  }
+  
+}
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+
+// get change url
+window.onhashchange = function() {
+    var newHash = window.location.hash.substring(1);
+	newHash = newHash.split("%22").join("\"")
+	var params = JSON.parse(newHash);
+	 setMap(params)	
+};
+
+
+
+
+// send new change url
+function sendMarkerListByeSeletor(MarkerSelected_p)
+{
+	var locObj = {loaction:pointArray,seledted:MarkerSelected_p}
+	var loactionStr = JSON.stringify(locObj)
+	
+	    document.location = (
+      "?~" + encodeURIComponent(loactionStr));
+}
+
+function sendMarkerList()
+{
+	var locObj = {loaction:pointArray,seledted:null}
+	var loactionStr = JSON.stringify(locObj)
+	
+	    document.location = (
+      "?~" + encodeURIComponent(loactionStr));
+}
+function initMap() {
+	
+	//alert(paramsObj.mapTypeId)
+	intM = true
+}
+
+cheker()
+function cheker()
+{
+		window.setTimeout(function() {
+		
+		if(paramsObj!=undefined && intM)
+		{
+			runMap()
+		}
+		else
+		{
+			cheker()
+		}
+		
+		}, 100);
+}
+
+ </script>
+    <script id = "map" async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
+    </script>
+	<form id="locationUser" action="">
+	  <a onclick="sendMarkerList()" id="btn">&nbsp;</a>
+	</form>
+  </body>
+</html>

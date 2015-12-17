@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+  <script type="text/javascript">
+
+function initMap() {
+  var chicago = {lat: 41.85, lng: -87.65};
+  var indianapolis = {lat: 39.79, lng: -86.14};
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: chicago,
+    scrollwheel: false,
+    zoom: 7
+  });
+
+  var directionsDisplay = new google.maps.DirectionsRenderer({
+    map: map
+  });
+
+  // Set destination, origin and travel mode.
+  var request = {
+    destination: indianapolis,
+    origin: chicago,
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+
+  // Pass the directions request to the directions service.
+  var directionsService = new google.maps.DirectionsService();
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      // Display the route on the map.
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+ </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
+    </script>
+  </body>
+</html>
