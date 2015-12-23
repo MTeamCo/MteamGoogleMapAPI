@@ -17,120 +17,65 @@ package map
 		
 		
 		
-	
-		private static var _mapType:MapTypeId
-		public static function get mapType():MapTypeId
-		{
-			if(_mapType==null)
-			{
-				_mapType = new MapTypeId()
-			}
-			return _mapType
-		}
+
 		
-		private  var _mapTypeId:String = mapType.MAP
-		public function set mapTypeId(MapTypeId_p:String):void
+		private var _displayMapWindow:DisplayMapWindow = new DisplayMapWindow()
+		public function set displayMapWindow(DisplayMapWindow_p:DisplayMapWindow):void
 		{
-			_mapTypeId = MapTypeId_p 
+			_displayMapWindow = DisplayMapWindow_p
 		}
-		public function get():String
-		{
-			return _mapTypeId
-		}
-		
-		private var  _marker:Boolean=false;
-		public function set marker(Marker_p:Boolean):void
-		{
-			_marker = Marker_p
-		}
-		public function get marker():Boolean
-		{
-			return _marker
-		}
-		private var _outLabel:Boolean=false
-		public function set outLabel(OutLabel_p:Boolean):void
-		{
-			_outLabel = OutLabel_p
-		}
-		public function get outLabel():Boolean
-		{
-			return _outLabel
-		}
-		private var _zoomOnSelectMarker:int=-1;
-		/** value -1 is disable zoom */
-		public function set  zoomOnSelectMarker(ZoomOnSelectMarker_p:int):void
-		{
-			_zoomOnSelectMarker = ZoomOnSelectMarker_p
-		}
-		public function get zoomOnSelectMarker():int
-		{
-			return _zoomOnSelectMarker
-		}
-		private var _panTo:Boolean=false;
-		public function set panTo(PanTo_p:Boolean):void
-		{
-			_panTo = PanTo_p
-		}
-		public function get panTo():Boolean
-		{
-			return _panTo
-		}
-		
-		private var _scrollwheel:Boolean=false;
-		public function set scrollwheel(Scrollwheel_p:Boolean):void
-		{
-			_scrollwheel = Scrollwheel_p 
-		}
-		public function get scrollwheel():Boolean
-		{
-			return _scrollwheel
-		}
-		
-		
-		private var _defaultZoom:int = 4
-		public function set defaultZoom(DefaultZoom_p:int):void
-		{
-			_defaultZoom = DefaultZoom_p
-		}
-		public function get defaultZoom():int
-		{
-			return _defaultZoom
-		}
+
 		
 		private var _mapStage:StageWebView;
 		public function get mapStage():StageWebView
 		{
 			return _mapStage
 		}
-				
+		
+
+
 		private var _target:MovieClip,
 					_stage:Stage,
 					_path:File,
 					counter:int,
 					_movieMap:MovieClip;
 					
-		protected var htmlUrl:String;	
-		
-		protected var _area:Rectangle;
+		protected var htmlUrl:String,	
+					_fullScreen:Boolean=false;
 		public function Map()
 		{
 
 		}
-		public function setup(Target_p:MovieClip,Area_p:Rectangle):void
+		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapWindow=null):void
 		{
 			_target = Target_p
-			_area = Area_p
-				
+
+			_displayMapWindow = DisplayMapWindow_p	
+
+			if(_displayMapWindow.fullscreen == DisplayMapWindow.fullScreen.FULLSCREEN)
+			{
+				_fullScreen = true
+			}
+			setFullScreen()
 			_movieMap = new MovieClip()
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap)			
 		}
-		
+		private function setFullScreen():void
+		{
+			if(_fullScreen && _displayMapWindow.fullScreenArea!=null)
+			{
+				_displayMapWindow.viewPort = _displayMapWindow.fullScreenArea	
+			}
+			else
+			{
+				_displayMapWindow.viewPort = _displayMapWindow.area	
+			}
+		}
 		protected function onRemovedFromStage(event:Event):void
 		{
 			// TODO Auto-generated method stub
-			hideMap()
 			_movieMap.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		}
 		
@@ -157,7 +102,7 @@ package map
 			// TODO Auto Generated method stub	
 			_mapStage = new StageWebView();
 				
-			_mapStage.viewPort = _area
+			_mapStage.viewPort = _displayMapWindow.viewPort
 				
 			_mapStage.stage = _stage;
 				
@@ -190,29 +135,62 @@ package map
 			// TODO Auto-generated method stub
 			
 		}
-		protected function setLoaction(Location_p:Array,ShowAllMarker_p:Boolean=false,MarkerAndPanTo_p:Boolean=false,BackToMarker_p:int=-1,SendBtnUrlImage_p:String='',SendBtnLocatoin_p:Rectangle=null):void 
+		protected function setLoaction(Location_p:Array,FullScreen_p:Boolean=false):void 
 		{
+			if(FullScreen_p!=_fullScreen)
+			{
+				_fullScreen = FullScreen_p
+				hideMap()
+				setFullScreen()
+				showMap()				
+			}
 			counter++
 			var _params:Object = new Object()
 				_params.location = Location_p	
-				_params.scrollwheel = _scrollwheel
-				_params.zoom = _defaultZoom	
-				_params.marker = _marker
-				_params.showAllMarker = ShowAllMarker_p
-				_params.panTo = _panTo
-				_params.markerAndPanTo = MarkerAndPanTo_p
-				_params.backToMarker = BackToMarker_p	
-				_params.zoomOnSelectMarker = _zoomOnSelectMarker
-				_params.outLabel = _outLabel	
-				_params.mapTypeId = _mapTypeId
-				_params.sendBtnUrlImage = SendBtnUrlImage_p
-				if(SendBtnLocatoin_p!=null)
+				_params.scrollwheel = _displayMapWindow.scrollwheel
+				_params.zoom = _displayMapWindow.defaultZoom	
+				_params.marker = _displayMapWindow.marker
+				_params.showAllMarker = _displayMapWindow.showAllMarker
+				_params.panTo = _displayMapWindow.panTo
+				_params.markerAndPanTo = _displayMapWindow.markerAndPanTo
+				_params.backToMarker = _displayMapWindow.backToMarker	
+				_params.zoomOnSelectMarker = _displayMapWindow.zoomOnSelectMarker
+				_params.sendMarkerSelected = _displayMapWindow.sendMarkerSelected	
+				_params.outLabel = _displayMapWindow.outLabel	
+				_params.mapTypeId = _displayMapWindow.mapTypeId
+				_params.sendBtnUrlImage = _displayMapWindow.sendButtonLocation.url
+				_params.fullScreenUrlImage = _displayMapWindow.fullScreenButtonStyle.url	
+				_params.restoreFullScreenUrlImage = _displayMapWindow.restoreFullScreenButtonStyle.url
+				_params.fullScreen = _fullScreen
+				if(_displayMapWindow.sendButton)
 				{
-					_params.sendBtnWidth = SendBtnLocatoin_p.width
-					_params.sendBtnHeight = SendBtnLocatoin_p.height
-					_params.sendBtnX = SendBtnLocatoin_p.x
-					_params.sendBtnY = SendBtnLocatoin_p.y
+					_params.sendBtnWidth = _displayMapWindow.sendButtonLocation.position.width
+					_params.sendBtnHeight = _displayMapWindow.sendButtonLocation.position.height
+					_params.sendBtnX = _displayMapWindow.sendButtonLocation.position.x
+					_params.sendBtnY = _displayMapWindow.sendButtonLocation.position.y
 				}
+				if(_displayMapWindow.fullScreenArea!=null)
+				{
+					_params.fullScreenStatus=true
+					if(!_fullScreen)
+					{
+						_params.fullScreenBtnStyleWidth = _displayMapWindow.fullScreenButtonStyle.position.width
+						_params.fullScreenBtnStyleHeight= _displayMapWindow.fullScreenButtonStyle.position.height
+						_params.fullScreenBtnStyleX= _displayMapWindow.fullScreenButtonStyle.position.x
+						_params.fullScreenBtnStyleY= _displayMapWindow.fullScreenButtonStyle.position.y
+						_params.fullScreenBtnUrl= _displayMapWindow.fullScreenButtonStyle.url
+					}
+					else
+					{
+						_params.fullScreenBtnStyleWidth = _displayMapWindow.restoreFullScreenButtonStyle.position.width
+						_params.fullScreenBtnStyleHeight= _displayMapWindow.restoreFullScreenButtonStyle.position.height
+						_params.fullScreenBtnStyleX= _displayMapWindow.restoreFullScreenButtonStyle.position.x
+						_params.fullScreenBtnStyleY= _displayMapWindow.restoreFullScreenButtonStyle.position.y
+						_params.fullScreenBtnUrl= _displayMapWindow.restoreFullScreenButtonStyle.url
+					}
+				}
+				
+				
 				_params.conter = counter
 			var _paramsJson:String= JSON.stringify(_params)			
 
@@ -222,11 +200,3 @@ package map
 	}
 }
 
-
-///////////////////////////////
-internal class MapTypeId
-{
-	
-	public const MAP:String = "MAP",
-		SATELLITE:String = "SATELLITE";
-}

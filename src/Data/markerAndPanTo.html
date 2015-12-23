@@ -22,6 +22,7 @@ var markers = [];
 var pointArray = [];
 var intM=false
 var paramsObj
+var fullScreen=false
 
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
@@ -52,15 +53,19 @@ function setMarker(Marker_p)
 		}, paramsObj.backToMarker);
 	});
   }
-  if(paramsObj.zoomOnSelectMarker>-1)
-  {
-	marker.addListener('click', function() {
-		map.setZoom(paramsObj.zoomOnSelectMarker);
-		map.setCenter(marker.getPosition());
-		sendMarkerListByeSeletor(Marker_p)
-		//////////////////////////////////////////////////////////
-	});
-	}
+
+	marker.addListener('click', function()
+	{
+	  if(paramsObj.zoomOnSelectMarker>-1)
+		{
+			map.setZoom(paramsObj.zoomOnSelectMarker);
+			map.setCenter(marker.getPosition());
+		}	
+		if(paramsObj.sendMarkerSelected)
+		{
+			sendMarkerListByeSeletor(Marker_p)
+		}
+	});	
 }
 
 
@@ -97,6 +102,21 @@ function runMap()
 		document.getElementById("btn").style.backgroundSize = paramsObj.sendBtnWidth+"px "+paramsObj.sendBtnHeight+"px";
 	}
 
+	if(paramsObj.fullScreenStatus)
+	{
+		document.getElementById("fullScreenbtn").style.backgroundImage="url("+paramsObj.fullScreenBtnUrl+")";
+		document.getElementById("fullScreenbtn").style.backgroundRepeat="no-repeat";
+		document.getElementById("fullScreenbtn").style.backgroundPosition="center";
+		document.getElementById("fullScreenbtn").style.position = "absolute";
+				
+		document.getElementById("fullScreenbtn").style.top=paramsObj.fullScreenBtnStyleY+"px"
+		document.getElementById("fullScreenbtn").style.left =paramsObj.fullScreenBtnStyleX+"px"
+		
+			document.getElementById("fullScreenbtn").style.width=paramsObj.fullScreenBtnStyleWidth+"px"
+		document.getElementById("fullScreenbtn").style.height=paramsObj.fullScreenBtnStyleHeight+"px"
+	
+		document.getElementById("fullScreenbtn").style.backgroundSize = paramsObj.fullScreenBtnStyleWidth+"px "+paramsObj.fullScreenBtnStyleHeight+"px";
+	}
 	
 	var mapTypeId
 	if(paramsObj.mapTypeId == "SATELLITE")
@@ -141,7 +161,7 @@ function runMap()
 function placeMarkerAndPanTo(loaction) 
 {
 	label(loaction)
-	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:''}
+	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:''}
 	 pointArray.push(newMarker)
 	if(paramsObj.markerAndPanTo)
 	{
@@ -177,7 +197,7 @@ window.onhashchange = function() {
 // send new change url
 function sendMarkerListByeSeletor(MarkerSelected_p)
 {
-	var locObj = {loaction:pointArray,seledted:MarkerSelected_p}
+	var locObj = {loaction:pointArray,seledted:MarkerSelected_p,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
 	
 	    document.location = (
@@ -186,7 +206,7 @@ function sendMarkerListByeSeletor(MarkerSelected_p)
 
 function sendMarkerList()
 {
-	var locObj = {loaction:pointArray,seledted:null}
+	var locObj = {loaction:pointArray,seledted:null,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
 	
 	    document.location = (
@@ -214,13 +234,20 @@ function cheker()
 		
 		}, 100);
 }
-
+function fullScreenFun()
+{
+	paramsObj.fullScreen = !paramsObj.fullScreen
+	sendMarkerList()
+}
  </script>
     <script id = "map" async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
     </script>
 	<form id="locationUser" action="">
 	  <a onclick="sendMarkerList()" id="btn">&nbsp;</a>
+	</form>
+		<form id="fullScreenId" action="">
+	  <a onclick="fullScreenFun()" id="fullScreenbtn">&nbsp;</a>
 	</form>
   </body>
 </html>
