@@ -34,11 +34,11 @@ package map
 		
 		public var fullscreen:String= DisplayMapWindow.fullScreen.RESTORE
 			
-		public var fullScreenButtonStyle:ButtonStyle = new ButtonStyle('fullScreen.png', new Rectangle(215,10,34,34))
-		public var restoreFullScreenButtonStyle:ButtonStyle = new ButtonStyle('restoreFullScreen.png', new Rectangle(210,10,34,34))	
+		public var fullScreenButtonStyle:ButtonStyle = new ButtonStyle('FullScreen', new Rectangle(10,120,70,30))
+		public var restoreFullScreenButtonStyle:ButtonStyle = new ButtonStyle('Restore', new Rectangle(10,120,50,30))	
 
 		///////////////////////
-		public var sendButtonLocation:ButtonStyle = new ButtonStyle('send.png',new Rectangle(110,10,103,34))
+		public var sendButtonLocation:ButtonStyle = new ButtonStyle('Send Loaction',new Rectangle(10,80,97,30))
 		public var sendButton:Boolean = true	
 		////////////////////////
 		

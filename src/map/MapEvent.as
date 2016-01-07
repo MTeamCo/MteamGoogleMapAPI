@@ -6,7 +6,8 @@ package map
 	public class MapEvent extends Event
 	{
 		public static const LOAD_COMPELET:String = "LOAD_COMPELET",
-							GET_MARKER_LIST:String = "GET_MARKER_LIST";
+							GET_MARKER_LIST:String = "GET_MARKER_LIST",
+							GEOLOCATION_UPDATE:String = "GEOLOCATION_UPDATE";
 
 		
 		private var _loadCompelet:Boolean;

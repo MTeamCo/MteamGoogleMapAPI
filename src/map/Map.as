@@ -158,17 +158,16 @@ package map
 				_params.sendMarkerSelected = _displayMapWindow.sendMarkerSelected	
 				_params.outLabel = _displayMapWindow.outLabel	
 				_params.mapTypeId = _displayMapWindow.mapTypeId
-				_params.sendBtnUrlImage = _displayMapWindow.sendButtonLocation.url
-				_params.fullScreenUrlImage = _displayMapWindow.fullScreenButtonStyle.url	
-				_params.restoreFullScreenUrlImage = _displayMapWindow.restoreFullScreenButtonStyle.url
+					
+					
+				_params.sendBtnTitle = _displayMapWindow.sendButtonLocation.title
+				_params.sendBtnWidth = _displayMapWindow.sendButtonLocation.position.width
+				_params.sendBtnHeight = _displayMapWindow.sendButtonLocation.position.height
+				_params.sendBtnX = _displayMapWindow.sendButtonLocation.position.x
+				_params.sendBtnY = _displayMapWindow.sendButtonLocation.position.y
+				_params.sendButton = _displayMapWindow.sendButton
 				_params.fullScreen = _fullScreen
-				if(_displayMapWindow.sendButton)
-				{
-					_params.sendBtnWidth = _displayMapWindow.sendButtonLocation.position.width
-					_params.sendBtnHeight = _displayMapWindow.sendButtonLocation.position.height
-					_params.sendBtnX = _displayMapWindow.sendButtonLocation.position.x
-					_params.sendBtnY = _displayMapWindow.sendButtonLocation.position.y
-				}
+		
 				if(_displayMapWindow.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true
@@ -178,7 +177,7 @@ package map
 						_params.fullScreenBtnStyleHeight= _displayMapWindow.fullScreenButtonStyle.position.height
 						_params.fullScreenBtnStyleX= _displayMapWindow.fullScreenButtonStyle.position.x
 						_params.fullScreenBtnStyleY= _displayMapWindow.fullScreenButtonStyle.position.y
-						_params.fullScreenBtnUrl= _displayMapWindow.fullScreenButtonStyle.url
+						_params.fullScreenTitle= _displayMapWindow.fullScreenButtonStyle.title
 					}
 					else
 					{
@@ -186,7 +185,7 @@ package map
 						_params.fullScreenBtnStyleHeight= _displayMapWindow.restoreFullScreenButtonStyle.position.height
 						_params.fullScreenBtnStyleX= _displayMapWindow.restoreFullScreenButtonStyle.position.x
 						_params.fullScreenBtnStyleY= _displayMapWindow.restoreFullScreenButtonStyle.position.y
-						_params.fullScreenBtnUrl= _displayMapWindow.restoreFullScreenButtonStyle.url
+						_params.fullScreenTitle= _displayMapWindow.restoreFullScreenButtonStyle.title
 					}
 				}
 				

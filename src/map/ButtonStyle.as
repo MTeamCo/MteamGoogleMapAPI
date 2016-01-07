@@ -6,11 +6,11 @@ package map
 	{
 
 		
-		public var url:String,
+		public var title:String,
 		position:Rectangle;
-		public function ButtonStyle(Url_p,Position_p:Rectangle)
+		public function ButtonStyle(Title_p,Position_p:Rectangle)
 		{
-			url = Url_p
+			title = Title_p
 			position = Position_p				
 		}
 	}

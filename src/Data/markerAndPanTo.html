@@ -55,7 +55,7 @@ function setMarker(Marker_p)
   }
 
 	marker.addListener('click', function()
-	{
+	{	
 	  if(paramsObj.zoomOnSelectMarker>-1)
 		{
 			map.setZoom(paramsObj.zoomOnSelectMarker);
@@ -86,36 +86,71 @@ function setMap(params) {
 }
 function runMap()
 {
-	if(paramsObj.sendBtnUrlImage!=null)
+	if(paramsObj.sendButton)
 	{
-		document.getElementById("btn").style.backgroundImage="url("+paramsObj.sendBtnUrlImage+")";
-		document.getElementById("btn").style.backgroundRepeat="no-repeat";
-		document.getElementById("btn").style.backgroundPosition="center";
-		document.getElementById("btn").style.position = "absolute";
-				
-		document.getElementById("btn").style.top=paramsObj.sendBtnY+"px"
-		document.getElementById("btn").style.left =paramsObj.sendBtnX+"px"
-		
-			document.getElementById("btn").style.width=paramsObj.sendBtnWidth+"px"
-		document.getElementById("btn").style.height=paramsObj.sendBtnHeight+"px"
+	var sendButton = document.getElementsByClassName("send")
+    var t = document.createTextNode(paramsObj.sendBtnTitle);
 	
-		document.getElementById("btn").style.backgroundSize = paramsObj.sendBtnWidth+"px "+paramsObj.sendBtnHeight+"px";
+	document.getElementById("sendText").appendChild(t);
+	
+	sendButton[0].style.backgroundColor ="#ffffff";
+	sendButton[0].style.borderRadius  = "3px";
+	
+	sendButton[0].style.borderStyle="solid";
+	sendButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	sendButton[0].style.borderTopStyle="none"
+	sendButton[0].style.borderLeftStyle="none"
+	sendButton[0].style.borderWidth="2px";
+
+
+	sendButton[0].style.fontSize = "small";
+	sendButton[0].style.font = "arial";
+	document.getElementById("sendText").style.color = "#333333"
+	sendButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	sendButton[0].style.top = paramsObj.sendBtnY+"px";
+	sendButton[0].style.left = paramsObj.sendBtnX+"px";
+	sendButton[0].style.width = paramsObj.sendBtnWidth+"px"
+	sendButton[0].style.height = paramsObj.sendBtnHeight+"px"
+		
+	sendButton[0].style.verticalAlign="center";
+	sendButton[0].style.textAlign = "center";
+	sendButton[0].style.position = "absolute";
+	
+
 	}
 
 	if(paramsObj.fullScreenStatus)
-	{
-		document.getElementById("fullScreenbtn").style.backgroundImage="url("+paramsObj.fullScreenBtnUrl+")";
-		document.getElementById("fullScreenbtn").style.backgroundRepeat="no-repeat";
-		document.getElementById("fullScreenbtn").style.backgroundPosition="center";
-		document.getElementById("fullScreenbtn").style.position = "absolute";
-				
-		document.getElementById("fullScreenbtn").style.top=paramsObj.fullScreenBtnStyleY+"px"
-		document.getElementById("fullScreenbtn").style.left =paramsObj.fullScreenBtnStyleX+"px"
-		
-			document.getElementById("fullScreenbtn").style.width=paramsObj.fullScreenBtnStyleWidth+"px"
-		document.getElementById("fullScreenbtn").style.height=paramsObj.fullScreenBtnStyleHeight+"px"
+	{	
+	var fullScreenButton = document.getElementsByClassName("fullScreenId")
+    var fullScreenText = document.createTextNode(paramsObj.fullScreenTitle);
 	
-		document.getElementById("fullScreenbtn").style.backgroundSize = paramsObj.fullScreenBtnStyleWidth+"px "+paramsObj.fullScreenBtnStyleHeight+"px";
+	document.getElementById("fullScreenText").appendChild(fullScreenText);
+	
+	fullScreenButton[0].style.backgroundColor ="#ffffff";
+	fullScreenButton[0].style.borderRadius  = "3px";
+	
+	fullScreenButton[0].style.borderStyle="solid";
+	fullScreenButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	fullScreenButton[0].style.borderTopStyle="none"
+	fullScreenButton[0].style.borderLeftStyle="none"
+	fullScreenButton[0].style.borderWidth="2px";
+
+
+	fullScreenButton[0].style.fontSize = "small";
+	fullScreenButton[0].style.font = "arial";
+	document.getElementById("fullScreenText").style.color = "#333333"
+	fullScreenButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	fullScreenButton[0].style.top = paramsObj.fullScreenBtnStyleY+"px";
+	fullScreenButton[0].style.left = paramsObj.fullScreenBtnStyleX+"px";
+	fullScreenButton[0].style.width = paramsObj.fullScreenBtnStyleWidth+"px"
+	fullScreenButton[0].style.height = paramsObj.fullScreenBtnStyleHeight+"px"
+		
+	fullScreenButton[0].style.verticalAlign="center";
+	fullScreenButton[0].style.textAlign = "center";
+	fullScreenButton[0].style.position = "absolute";
+	
 	}
 	
 	var mapTypeId
@@ -166,6 +201,9 @@ function placeMarkerAndPanTo(loaction)
 	if(paramsObj.markerAndPanTo)
 	{
 		setMarker(newMarker)
+		var sendButton = document.getElementsByClassName("send")
+		sendButton[0].style.backgroundColor ="#F60B31";
+		document.getElementById("sendText").style.color = "#ffffff"
 	}
 	
 	
@@ -243,11 +281,18 @@ function fullScreenFun()
     <script id = "map" async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
     </script>
-	<form id="locationUser" action="">
-	  <a onclick="sendMarkerList()" id="btn">&nbsp;</a>
-	</form>
-		<form id="fullScreenId" action="">
-	  <a onclick="fullScreenFun()" id="fullScreenbtn">&nbsp;</a>
-	</form>
+
+	
+<table class="fullScreenId">
+  <tr>
+    <td <a onclick="fullScreenFun()" id="fullScreenText">&nbsp;</a></td>
+  </tr>
+</table>	
+	
+<table class="send">
+  <tr>
+    <td <a onclick="sendMarkerList()" id="sendText">&nbsp;</a></td>
+  </tr>
+</table>
   </body>
 </html>
