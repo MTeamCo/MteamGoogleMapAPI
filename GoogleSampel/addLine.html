@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+  <script type="text/javascript">
+ var flightPath;
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+   zoom: 3,
+    center: {lat: 0, lng: -180},
+	
+	//mapTypeId: google.maps.MapTypeId.TERRAIN
+  });
+//--------------------------------------------------------------------------------------------------------------
+ /*var marker = new google.maps.Marker({
+    position: map.getCenter(),
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 10
+    },
+    draggable: true,
+    map: map
+  });*/
+  //-----------------------------------------------------------------------------------------------------
+   /* var goldStar = {
+    path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+    fillColor: 'yellow',
+    fillOpacity: 0.8,
+    scale: 1,
+    strokeColor: 'gold',
+    strokeWeight: 14
+  };
+
+  var marker = new google.maps.Marker({
+    position: map.getCenter(),
+    icon: goldStar,
+    map: map
+  });*/
+  //---------------------------------------------------------------------------------------------------------------
+  var flightPathCoordinates = [
+    {lat: 37.772, lng: -122.214},
+    {lat: 21.291, lng: -157.821},
+    {lat: -18.142, lng: 178.431},
+    {lat: -27.467, lng: 153.027},
+	{lat:35,lng:51}
+  ];
+
+   var marker = new google.maps.Marker({
+    position: {lat: 21.291, lng: -157.821},
+    icon: {
+      path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+      scale: 2,
+	   strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+    },
+    draggable: true,
+    map: map
+  });
+
+    // Define a symbol using a predefined path (an arrow)
+  // supplied by the Google Maps JavaScript API.
+  var lineSymbol = {
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+  };
+
+  
+  flightPath = new google.maps.Polyline({
+    path: flightPathCoordinates,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+	    icons: [
+		{
+			icon: lineSymbol,
+			offset: '0%',
+			//repeat: '50px'
+		},{
+			icon: lineSymbol,
+			offset: '50%'
+		},{
+			icon: lineSymbol,
+			offset: '100%'
+		}
+	]
+  });
+
+  addLine();
+  
+ //------------------------------------------------------------------------------------------------------------------------ 
+ /*  var lineSymbol = {
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+  };
+  // Create the polyline and add the symbol via the 'icons' property.
+  var line = new google.maps.Polyline({
+    path: [{lat: 22.291, lng: 153.027}, {lat: 18.291, lng: 153.027}],
+    icons: [{
+      icon: lineSymbol,
+      offset: '100%'
+    }],
+    map: map
+  });*/
+  //-------------------------------------------------------------------------------------------------------------------------
+ /* var lineSymbol = {
+    path: 'M 0,-1 0,1',
+    strokeOpacity: 1,
+    scale: 4
+  };
+
+  // Create the polyline, passing the symbol in the 'icons' property.
+  // Give the line an opacity of 0.
+  // Repeat the symbol at intervals of 20 pixels to create the dashed effect.
+  var line = new google.maps.Polyline({
+    path: [{lat: 22.291, lng: 153.027}, {lat: 18.291, lng: 153.027}],
+    strokeOpacity: 0,
+    icons: [{
+      icon: lineSymbol,
+      offset: '0',
+      repeat: '20px'
+    }],
+    map: map
+  });*/
+ //----------------------------------------------------------------------------------------------------------------- 
+  // Define the custom symbols. All symbols are defined via SVG path notation.
+// They have varying stroke color, fill color, stroke weight,
+// opacity and rotation properties.
+ /* var symbolOne = {
+    path: 'M -2,0 0,-2 2,0 0,2 z',
+    strokeColor: '#F00',
+    fillColor: '#F00',
+    fillOpacity: 1
+  };
+
+  var symbolTwo = {
+    path: 'M -1,0 A 1,1 0 0 0 -3,0 1,1 0 0 0 -1,0M 1,0 A 1,1 0 0 0 3,0 1,1 0 0 0 1,0M -3,3 Q 0,5 3,3',
+    strokeColor: '#00F',
+    rotation: 45
+  };
+
+  var symbolThree = {
+    path: 'M -2,-2 2,2 M 2,-2 -2,2',
+    strokeColor: '#292',
+    strokeWeight: 4
+  };
+
+  // Create the polyline and add the symbols via the 'icons' property.
+  var line = new google.maps.Polyline({
+    path: [{lat: 22.291, lng: 153.027}, {lat: 18.291, lng: 153.027}],
+    icons: [
+      {
+        icon: symbolOne,
+        offset: '0%'
+      }, {
+        icon: symbolTwo,
+        offset: '50%'
+      }, {
+        icon: symbolThree,
+        offset: '100%'
+      }
+    ],
+    map: map
+  });*/
+  
+  
+  
+
+ } 
+ function addLine() {
+  flightPath.setMap(map);
+}
+
+function removeLine() {
+  flightPath.setMap(null);
+}
+ </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
   <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
@@ -12,14 +15,66 @@
 
 function initMap() {
   // Create a map object and specify the DOM element for display.
+    var farsiRoadMap = new google.maps.StyledMapType(
+  [
+  {
+    featureType: '',
+    elementType: '',
+    stylers: [
+      {hue: ''},
+      {saturation: ''},
+      {lightness: ''},
+      // etc...
+    ]
+  },
+  {
+    featureType: '',
+    // etc...
+  }
+]
+  , {
+      name: 'نقشه'
+  });
+  
+  var farsiRoadMapId = 'roadmapnew';
+  var customMapType = new google.maps.StyledMapType([
+      {
+        stylers: [
+          {hue: '#890000'},
+          {visibility: 'simplified'},
+          {gamma: 0.5},
+          {weight: 0.5}
+        ]
+      },
+      {
+        elementType: 'labels',
+        stylers: [{visibility: 'on'}]
+      },
+      {
+        featureType: 'water',
+        stylers: [{color: '#890000'}]
+      }
+    ], {
+      name: 'ماهواره'
+  });
+
+  var customMapTypeId = 'custom_style';
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
     // Set mapTypeId to google.maps.MapTypeId.SATELLITE in order
     // to activate satellite imagery.
-    mapTypeId: google.maps.MapTypeId.SATELLITE,
+        mapTypeControlOptions: {
+    //  mapTypeIds: [google.maps.MapTypeId.ROADMAP,google.maps.MapTypeId.SATELLITE,customMapTypeId]
+	  //google.maps.MapTypeId.HYBRID,google.maps.MapTypeId.TERRAIN
+	   mapTypeIds: [farsiRoadMapId,customMapTypeId]
+    },
     scrollwheel: false,
     zoom: 8
   });
+   map.mapTypes.set(farsiRoadMapId, farsiRoadMap);
+   map.mapTypes.set(customMapTypeId, customMapType);
+  map.setMapTypeId(farsiRoadMapId);
+  
 } </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">

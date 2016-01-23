@@ -35,7 +35,7 @@ package
 					displayMap.mapTypeId = DisplayMapWindow.mapTypeId.SATELLITE
 					displayMap.fullscreen = DisplayMapWindow.fullScreen.FULLSCREEN	
 					displayMap.area = new Rectangle(0,0,384,300)
-					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)	
+					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)		
 					displayMap.sendButton = true	
 					displayMap.marker = true
 					displayMap.markerAndPanTo = true
