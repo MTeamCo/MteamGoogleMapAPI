@@ -47,13 +47,20 @@ package map
 		{
 			return _id
 		}
-		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='')
+		
+		private var _icon:String;
+		public function get icon():String
+		{
+			return _icon
+		}
+		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='',Icon_p:String='')
 		{
 			_lat = Lat_p
 			_lng = Lng_p
 			_label = Label_p	
 			_title = Title_p	
-			_id = Id_p	
+			_id = Id_p
+			_icon = Icon_p	
 		}
 	}
 }

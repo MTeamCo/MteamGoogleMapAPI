@@ -31,8 +31,14 @@
     <fullScreen>false</fullScreen>
     <aspectRatio>portrait</aspectRatio>
     <renderMode>auto</renderMode>
-  </initialWindow>
+    <autoOrients>false</autoOrients></initialWindow>
   <icon/>
   <customUpdateUI>false</customUpdateUI>
   <allowBrowserInvocation>false</allowBrowserInvocation>
+  <versionLabel/>
+  <android>
+    <manifestAdditions><![CDATA[<manifest>
+<uses-permission android:name="android.permission.INTERNET"/>
+</manifest>]]></manifestAdditions>
+  </android>
 </application>

@@ -21,7 +21,7 @@ package map
 			_urlObject.loaction = new Array()
 			for each (var index:Marker in Location_p)
 			{
-				_urlObject.loaction.push({lat:index.lat,lng:index.lng,label:index.label,title:index.title,id:index.id})
+				_urlObject.loaction.push({lat:index.lat,lng:index.lng,label:index.label,title:index.title,id:index.id,icon:index.icon})
 			}	
 			
 				
@@ -49,7 +49,7 @@ package map
 				var _selectedMarkder:Marker=null
 				if(_urlObject.seledted!=null)
 				{
-					_selectedMarkder = new Marker(_urlObject.seledted.lat,_urlObject.seledted.lng,_urlObject.seledted.id,_urlObject.seledted.label,_urlObject.seledted.title)
+					_selectedMarkder = new Marker(_urlObject.seledted.lat,_urlObject.seledted.lng,_urlObject.seledted.id,_urlObject.seledted.label,_urlObject.seledted.title,_urlObject.seledted.icon)
 				}
 									
 				this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,listMarker(_urlObject.loaction),_selectedMarkder))	
@@ -74,7 +74,7 @@ package map
 			var _list:Vector.<Marker> = new Vector.<Marker>()
 			for each(var index:Object in List_p)
 			{
-				_list.push(new Marker(index.lat,index.lng,index.id,index.label,index.title))
+				_list.push(new Marker(index.lat,index.lng,index.id,index.label,index.title,index.icon))
 			}
 			return _list
 		}

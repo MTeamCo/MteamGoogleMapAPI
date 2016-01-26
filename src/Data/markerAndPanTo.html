@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">
       html, body { 
 		height: 100%;
@@ -10,12 +11,48 @@
       #map {
 		height: 100%; 
 	  }
+	  #preCenter{
+		 position: relative;
+		width:200px;
+		height:20px;
+		top:50%;
+		margin: auto;
+		
+	
+			
+	  }
+	  #preloader{
+		
+		border-style:solid;
+		border-radius:3px;
+		border-color: #666666;
+		border-width:2px;
+		background-color:#ECECEC
+		
+		
+		
+	  }
+	  #preladerText{
+
+		color: #333333;
+		text-align:center;
+		vertical-align: text-top;
+	  }
+	  
 
     </style>
+	<!--img src="preloaders/Internet.gif" alt="Mountain View" style="width:64px;height:64px;position:absolute"-->
+		
   </head>
 
   <body>
+ <div id="preCenter"> 
+	<div id="preloader">
+		  <p id="preladerText">...درحال بارگزاری</p>
+	</div>
+</div>
    <div id="map"></div>
+   
  <script type="text/javascript">
 var map
 var markers = [];
@@ -39,7 +76,8 @@ function setMarker(Marker_p)
 	map: map,
     position: Marker_p,
 	label: addLable,
-	title: Marker_p.title
+	title: Marker_p.title,
+	icon: Marker_p.icon
   });
   markers.push(marker);
   
@@ -86,6 +124,8 @@ function setMap(params) {
 }
 function runMap()
 {
+
+   
 	if(paramsObj.sendButton)
 	{
 	var sendButton = document.getElementsByClassName("send")
@@ -196,7 +236,7 @@ function runMap()
 function placeMarkerAndPanTo(loaction) 
 {
 	label(loaction)
-	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:''}
+	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
 	 pointArray.push(newMarker)
 	if(paramsObj.markerAndPanTo)
 	{

@@ -1,5 +1,7 @@
 package
 {
+	import file.SwitchUrl;
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -23,7 +25,9 @@ package
 
 			
 			var markerList:Vector.<Marker>= new Vector.<Marker>()
-			markerList.push(new Marker(40,45,'0','M','new marker'))
+				
+			SwitchUrl	
+			markerList.push(new Marker(40,45,'0','M','new marker','icon.png'))
 			markerList.push(new Marker(35,50,'1','K',''))	
 				var markerPanTo2:AddMarker = new AddMarker(markerList)
 				markerPanTo2.addEventListener(MapEvent.GET_MARKER_LIST,panto_fun)
@@ -33,7 +37,7 @@ package
 					
 				var displayMap:DisplayMapWindow = new DisplayMapWindow()
 					displayMap.mapTypeId = DisplayMapWindow.mapTypeId.SATELLITE
-					displayMap.fullscreen = DisplayMapWindow.fullScreen.FULLSCREEN	
+					//displayMap.fullscreen = DisplayMapWindow.fullScreen.FULLSCREEN	
 					displayMap.area = new Rectangle(0,0,384,300)
 					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)		
 					displayMap.sendButton = true	
