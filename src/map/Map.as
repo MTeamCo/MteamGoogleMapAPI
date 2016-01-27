@@ -72,6 +72,7 @@ package map
 			{
 				_displayMapWindow.viewPort = _displayMapWindow.area	
 			}
+
 		}
 		protected function onRemovedFromStage(event:Event):void
 		{
@@ -105,11 +106,11 @@ package map
 			_mapStage.viewPort = _displayMapWindow.viewPort
 				
 			_mapStage.stage = _stage;
-				
-			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,canging_fun)
+			
+			//_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,canging_fun)
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
-		
-				
+			
+			
 			_path = File.applicationDirectory.resolvePath(htmlUrl); 
 			if(DevicePrefrence.isAndroid())
 			{				
@@ -121,14 +122,13 @@ package map
 			{		
 				_mapStage.loadURL(_path.nativePath);
 			}
-
 		}
-		
-		protected function canging_fun(event:LocationChangeEvent):void
+		/*protected function canging_fun(event:LocationChangeEvent):void
 		{
 			// TODO Auto-generated method stub
 			trace('location changing :',event.location)
-		}
+		
+		}*/
 		
 		protected function onHTMLLoadComplete(event:Event):void
 		{
@@ -137,12 +137,14 @@ package map
 		}
 		protected function setLoaction(Location_p:Array,FullScreen_p:Boolean=false):void 
 		{
+		
 			if(FullScreen_p!=_fullScreen)
 			{
 				_fullScreen = FullScreen_p
-				hideMap()
 				setFullScreen()
-				showMap()				
+				_mapStage.viewPort = _displayMapWindow.viewPort		
+				_mapStage.stage = _stage;
+				_mapStage.reload()
 			}
 			counter++
 			var _params:Object = new Object()
@@ -167,7 +169,6 @@ package map
 				_params.sendBtnY = _displayMapWindow.sendButtonLocation.position.y
 				_params.sendButton = _displayMapWindow.sendButton
 				_params.fullScreen = _fullScreen
-		
 				if(_displayMapWindow.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true
