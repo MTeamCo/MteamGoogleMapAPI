@@ -94,7 +94,8 @@ package map
 			if(_mapStage!=null)
 			{
 				_mapStage.stage = null;
-				_mapStage.dispose();	
+				_mapStage.dispose();
+				_mapStage = null
 			}
 		}
 				
@@ -138,7 +139,7 @@ package map
 		protected function setLoaction(Location_p:Array,FullScreen_p:Boolean=false):void 
 		{
 		
-			if(FullScreen_p!=_fullScreen)
+			if(FullScreen_p!=_fullScreen && _mapStage!=null)
 			{
 				_fullScreen = FullScreen_p
 				setFullScreen()
@@ -193,8 +194,10 @@ package map
 				
 				_params.conter = counter
 			var _paramsJson:String= JSON.stringify(_params)			
-
-			_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
+			if(_mapStage!=null)
+			{		
+				_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
+			}
 			
 		}
 	}
