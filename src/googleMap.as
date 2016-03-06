@@ -42,7 +42,7 @@ package
 					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)		
 					displayMap.sendButton = true	
 					displayMap.marker = true
-					displayMap.markerAndPanTo = true
+					displayMap.markerAndPanTo = false
 					displayMap.panTo = true
 					displayMap.showAllMarker = true
 					displayMap.scrollwheel = true

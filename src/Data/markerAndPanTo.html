@@ -240,10 +240,10 @@ function runMap()
 function placeMarkerAndPanTo(loaction) 
 {
 	label(loaction)
-	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
-	 pointArray.push(newMarker)
 	if(paramsObj.markerAndPanTo)
 	{
+		var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
+		pointArray.push(newMarker)
 		setMarker(newMarker)
 		var sendButton = document.getElementsByClassName("send")
 		sendButton[0].style.backgroundColor ="#F60B31";
