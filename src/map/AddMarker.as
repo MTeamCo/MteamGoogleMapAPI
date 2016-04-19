@@ -23,9 +23,6 @@ package map
 			{
 				_urlObject.loaction.push({lat:index.lat,lng:index.lng,label:index.label,title:index.title,id:index.id,icon:index.icon})
 			}	
-			
-				
-			htmlUrl = 'Data/markerAndPanTo.html'		
 		}
 		override protected function onHTMLLoadComplete(event:Event):void
 		{

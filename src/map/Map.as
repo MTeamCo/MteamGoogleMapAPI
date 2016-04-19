@@ -10,9 +10,9 @@ package map
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
 
+	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
 	public class Map extends MovieClip
 	{
-		[Event(name="LOAD_COMPELET",type="map.MapEvent")]
 		/**use scroll midel for zoom*/
 		
 		
@@ -40,8 +40,10 @@ package map
 					counter:int,
 					_movieMap:MovieClip;
 					
-		protected var htmlUrl:String,	
-					_fullScreen:Boolean=false;
+		protected var _fullScreen:Boolean=false;
+					
+		public static var dataAddress:String,
+							htmlName:String;
 		public function Map()
 		{
 
@@ -112,7 +114,7 @@ package map
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
 			
 			
-			_path = File.applicationDirectory.resolvePath(htmlUrl); 
+			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
 			if(DevicePrefrence.isAndroid())
 			{				
 				var _pathCopy : File = File.createTempFile();

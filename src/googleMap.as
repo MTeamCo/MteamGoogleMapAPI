@@ -23,7 +23,8 @@ package
 						
 			trace('----------------- Sampel Google Map width javascript && AS3 -----------')
 
-			
+			Map.dataAddress =  'Data/';
+			Map.htmlName = 'markerAndPanTo.html';
 			var markerList:Vector.<Marker>= new Vector.<Marker>()
 				
 			SwitchUrl	
