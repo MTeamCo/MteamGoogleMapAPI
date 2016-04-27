@@ -64,6 +64,16 @@ package map
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap)			
 		}
+		public function update(DisplayMapWindow_p:DisplayMapWindow=null):void
+		{
+			if(_mapStage!=null)
+			{
+				_displayMapWindow = DisplayMapWindow_p	
+				_displayMapWindow.viewPort = _displayMapWindow.area
+				_mapStage.viewPort = _displayMapWindow.viewPort				
+				_mapStage.stage = _stage;
+			}
+		}
 		private function setFullScreen():void
 		{
 			if(_fullScreen && _displayMapWindow.fullScreenArea!=null)
@@ -93,6 +103,7 @@ package map
 		public function hideMap():void
 		{
 			// TODO Auto Generated method stub
+			trace('__mapStage :',_mapStage)
 			if(_mapStage!=null)
 			{
 				_mapStage.stage = null;
