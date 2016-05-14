@@ -62,17 +62,20 @@ package map
 			_label = Label_p	
 			_title = Title_p	
 			_id = Id_p
-			var _path:File = File.applicationDirectory.resolvePath(Icon_p);
-			var _pathCopy : File = File.createTempFile();
-			if(_path.exists)
-			{			
-				_path.copyTo(_pathCopy, true);
-				_icon = _pathCopy.url
-			}
-			else
-			{
-				trace('<<---Marker icons path is not exists and use default Google Map icon--->>')
-				_icon = '';
+			if(Icon_p!='')
+			{	
+				var _path:File = File.applicationDirectory.resolvePath(Icon_p);
+				var _pathCopy : File = File.createTempFile();
+				if(_path.exists)
+				{			
+					_path.copyTo(_pathCopy, true);
+					_icon = _pathCopy.url
+				}
+				else
+				{
+					trace('<<---Marker icons path is not exists and use default Google Map icon--->>')
+					_icon = '';
+				}
 			}
 		}
 	}

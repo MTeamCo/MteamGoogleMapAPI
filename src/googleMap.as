@@ -8,7 +8,7 @@ package
 	import flash.geom.Rectangle;
 	
 	import map.AddMarker;
-	import map.DisplayMapWindow;
+	import map.DisplayMapOption;
 	import map.Map;
 	import map.MapEvent;
 	import map.Marker;
@@ -36,9 +36,9 @@ package
 					
 	
 					
-				var displayMap:DisplayMapWindow = new DisplayMapWindow()
-					displayMap.mapTypeId = DisplayMapWindow.mapTypeId.SATELLITE
-					displayMap.fullscreen = DisplayMapWindow.fullScreen.FULLSCREEN	
+				var displayMap:DisplayMapOption = new DisplayMapOption()
+					displayMap.mapTypeId = DisplayMapOption.mapTypeId.SATELLITE
+					displayMap.fullscreen = DisplayMapOption.fullScreen.FULLSCREEN	
 					displayMap.area = new Rectangle(0,0,384,300)
 					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)		
 					displayMap.sendButton = true	

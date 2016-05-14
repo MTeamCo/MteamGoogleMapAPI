@@ -2,7 +2,7 @@ package map
 {
 	import flash.geom.Rectangle;
 
-	public class DisplayMapWindow
+	public class DisplayMapOption
 	{
 		private static var __mapTypeId:MapTypeId
 		public static function get mapTypeId():MapTypeId
@@ -15,7 +15,7 @@ package map
 		}
 			
 
-		public  var mapTypeId:String = DisplayMapWindow.mapTypeId.MAP
+		public  var mapTypeId:String = DisplayMapOption.mapTypeId.MAP
 
 		//////////////////////////////////////////////////////////////
 		
@@ -32,7 +32,7 @@ package map
 		
 		
 		
-		public var fullscreen:String= DisplayMapWindow.fullScreen.RESTORE
+		public var fullscreen:String= DisplayMapOption.fullScreen.RESTORE
 			
 		public var fullScreenButtonStyle:ButtonStyle = new ButtonStyle('FullScreen', new Rectangle(10,120,70,30))
 		public var restoreFullScreenButtonStyle:ButtonStyle = new ButtonStyle('Restore', new Rectangle(10,120,50,30))	
@@ -71,10 +71,10 @@ package map
 					
 		public var defaultZoom:int = 4
 
-					
+		public var location:Vector.<Marker>;			
 		
 		
-		public function DisplayMapWindow()
+		public function DisplayMapOption()
 		{
 		}
 

@@ -19,10 +19,10 @@ package map
 		
 
 		
-		private var _displayMapWindow:DisplayMapWindow = new DisplayMapWindow()
-		public function set displayMapWindow(DisplayMapWindow_p:DisplayMapWindow):void
+		protected var displayMapOption:DisplayMapOption = new DisplayMapOption()
+		public function set displayMapWindow(DisplayMapOption_p:DisplayMapOption):void
 		{
-			_displayMapWindow = DisplayMapWindow_p
+			displayMapOption = DisplayMapOption_p
 		}
 
 		
@@ -48,13 +48,13 @@ package map
 		{
 
 		}
-		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapWindow=null):void
+		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapOption=null):void
 		{
 			_target = Target_p
 
-			_displayMapWindow = DisplayMapWindow_p	
+			displayMapOption = DisplayMapWindow_p	
 
-			if(_displayMapWindow.fullscreen == DisplayMapWindow.fullScreen.FULLSCREEN)
+			if(displayMapOption.fullscreen == DisplayMapOption.fullScreen.FULLSCREEN)
 			{
 				_fullScreen = true
 			}
@@ -62,27 +62,32 @@ package map
 			_movieMap = new MovieClip()
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
-			_target.addChild(_movieMap)			
+			_target.addChild(_movieMap)		
+			addMarker()	
 		}
-		public function update(DisplayMapWindow_p:DisplayMapWindow=null):void
+		protected function addMarker():void
+		{
+			
+		}
+		public function update(DisplayMapWindow_p:DisplayMapOption=null):void
 		{
 			if(_mapStage!=null)
 			{
-				_displayMapWindow = DisplayMapWindow_p	
-				_displayMapWindow.viewPort = _displayMapWindow.area
-				_mapStage.viewPort = _displayMapWindow.viewPort				
+				displayMapOption = DisplayMapWindow_p	
+				displayMapOption.viewPort = displayMapOption.area
+				_mapStage.viewPort = displayMapOption.viewPort				
 				_mapStage.stage = _stage;
 			}
 		}
 		private function setFullScreen():void
 		{
-			if(_fullScreen && _displayMapWindow.fullScreenArea!=null)
+			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
-				_displayMapWindow.viewPort = _displayMapWindow.fullScreenArea	
+				displayMapOption.viewPort = displayMapOption.fullScreenArea	
 			}
 			else
 			{
-				_displayMapWindow.viewPort = _displayMapWindow.area	
+				displayMapOption.viewPort = displayMapOption.area	
 			}
 
 		}
@@ -117,7 +122,7 @@ package map
 			// TODO Auto Generated method stub	
 			_mapStage = new StageWebView();
 				
-			_mapStage.viewPort = _displayMapWindow.viewPort
+			_mapStage.viewPort = displayMapOption.viewPort
 				
 			_mapStage.stage = _stage;
 			
@@ -156,51 +161,57 @@ package map
 			{
 				_fullScreen = FullScreen_p
 				setFullScreen()
-				_mapStage.viewPort = _displayMapWindow.viewPort		
+				_mapStage.viewPort = displayMapOption.viewPort		
 				_mapStage.stage = _stage;
 				_mapStage.reload()
 			}
-			counter++
+			counter++;
+			
+			/*for(var i in Obj.createReadAbleObject(_displayMapWindow))
+			{
+				_params[i] = _displayMapWindow
+			}*/
+			
 			var _params:Object = new Object()
 				_params.location = Location_p	
-				_params.scrollwheel = _displayMapWindow.scrollwheel
-				_params.zoom = _displayMapWindow.defaultZoom	
-				_params.marker = _displayMapWindow.marker
-				_params.showAllMarker = _displayMapWindow.showAllMarker
-				_params.panTo = _displayMapWindow.panTo
-				_params.markerAndPanTo = _displayMapWindow.markerAndPanTo
-				_params.backToMarker = _displayMapWindow.backToMarker	
-				_params.zoomOnSelectMarker = _displayMapWindow.zoomOnSelectMarker
-				_params.sendMarkerSelected = _displayMapWindow.sendMarkerSelected	
-				_params.outLabel = _displayMapWindow.outLabel	
-				_params.mapTypeId = _displayMapWindow.mapTypeId
+				_params.scrollwheel = displayMapOption.scrollwheel
+				_params.zoom = displayMapOption.defaultZoom	
+				_params.marker = displayMapOption.marker
+				_params.showAllMarker = displayMapOption.showAllMarker
+				_params.panTo = displayMapOption.panTo
+				_params.markerAndPanTo = displayMapOption.markerAndPanTo
+				_params.backToMarker = displayMapOption.backToMarker	
+				_params.zoomOnSelectMarker = displayMapOption.zoomOnSelectMarker
+				_params.sendMarkerSelected = displayMapOption.sendMarkerSelected	
+				_params.outLabel = displayMapOption.outLabel	
+				_params.mapTypeId = displayMapOption.mapTypeId
 					
 					
-				_params.sendBtnTitle = _displayMapWindow.sendButtonLocation.title
-				_params.sendBtnWidth = _displayMapWindow.sendButtonLocation.position.width
-				_params.sendBtnHeight = _displayMapWindow.sendButtonLocation.position.height
-				_params.sendBtnX = _displayMapWindow.sendButtonLocation.position.x
-				_params.sendBtnY = _displayMapWindow.sendButtonLocation.position.y
-				_params.sendButton = _displayMapWindow.sendButton
+				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title
+				_params.sendBtnWidth = displayMapOption.sendButtonLocation.position.width
+				_params.sendBtnHeight = displayMapOption.sendButtonLocation.position.height
+				_params.sendBtnX = displayMapOption.sendButtonLocation.position.x
+				_params.sendBtnY = displayMapOption.sendButtonLocation.position.y
+				_params.sendButton = displayMapOption.sendButton
 				_params.fullScreen = _fullScreen
-				if(_displayMapWindow.fullScreenArea!=null)
+				if(displayMapOption.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true
 					if(!_fullScreen)
 					{
-						_params.fullScreenBtnStyleWidth = _displayMapWindow.fullScreenButtonStyle.position.width
-						_params.fullScreenBtnStyleHeight= _displayMapWindow.fullScreenButtonStyle.position.height
-						_params.fullScreenBtnStyleX= _displayMapWindow.fullScreenButtonStyle.position.x
-						_params.fullScreenBtnStyleY= _displayMapWindow.fullScreenButtonStyle.position.y
-						_params.fullScreenTitle= _displayMapWindow.fullScreenButtonStyle.title
+						_params.fullScreenBtnStyleWidth = displayMapOption.fullScreenButtonStyle.position.width
+						_params.fullScreenBtnStyleHeight= displayMapOption.fullScreenButtonStyle.position.height
+						_params.fullScreenBtnStyleX= displayMapOption.fullScreenButtonStyle.position.x
+						_params.fullScreenBtnStyleY= displayMapOption.fullScreenButtonStyle.position.y
+						_params.fullScreenTitle= displayMapOption.fullScreenButtonStyle.title
 					}
 					else
 					{
-						_params.fullScreenBtnStyleWidth = _displayMapWindow.restoreFullScreenButtonStyle.position.width
-						_params.fullScreenBtnStyleHeight= _displayMapWindow.restoreFullScreenButtonStyle.position.height
-						_params.fullScreenBtnStyleX= _displayMapWindow.restoreFullScreenButtonStyle.position.x
-						_params.fullScreenBtnStyleY= _displayMapWindow.restoreFullScreenButtonStyle.position.y
-						_params.fullScreenTitle= _displayMapWindow.restoreFullScreenButtonStyle.title
+						_params.fullScreenBtnStyleWidth = displayMapOption.restoreFullScreenButtonStyle.position.width
+						_params.fullScreenBtnStyleHeight= displayMapOption.restoreFullScreenButtonStyle.position.height
+						_params.fullScreenBtnStyleX= displayMapOption.restoreFullScreenButtonStyle.position.x
+						_params.fullScreenBtnStyleY= displayMapOption.restoreFullScreenButtonStyle.position.y
+						_params.fullScreenTitle= displayMapOption.restoreFullScreenButtonStyle.title
 					}
 				}
 				

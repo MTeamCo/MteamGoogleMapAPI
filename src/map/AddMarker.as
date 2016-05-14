@@ -13,16 +13,19 @@ package map
 		private var _urlObject:Object=new Object();
 
 
-		public function AddMarker(Location_p:Vector.<Marker>)
+		public function AddMarker()
 		{
 						
 			super();	
 				
+		}
+		override protected function addMarker():void
+		{
 			_urlObject.loaction = new Array()
-			for each (var index:Marker in Location_p)
+			for each (var index:Marker in displayMapOption.location)
 			{
 				_urlObject.loaction.push({lat:index.lat,lng:index.lng,label:index.label,title:index.title,id:index.id,icon:index.icon})
-			}	
+			}
 		}
 		override protected function onHTMLLoadComplete(event:Event):void
 		{
