@@ -32,7 +32,11 @@ package map
 			return _mapStage
 		}
 		
-
+		private var _isHide:Boolean= true;
+		public function get isHide():Boolean
+		{
+			return _isHide
+		}
 
 		private var _target:MovieClip,
 					_stage:Stage,
@@ -114,11 +118,13 @@ package map
 				_mapStage.stage = null;
 				_mapStage.dispose();
 				_mapStage = null
+				_isHide = true	
 			}
 		}
 				
 		protected function showMap():void
 		{
+			_isHide = false
 			// TODO Auto Generated method stub	
 			_mapStage = new StageWebView();
 				
@@ -174,6 +180,7 @@ package map
 			
 			var _params:Object = new Object()
 				_params.location = Location_p	
+
 				_params.scrollwheel = displayMapOption.scrollwheel
 				_params.zoom = displayMapOption.defaultZoom	
 				_params.marker = displayMapOption.marker
@@ -185,6 +192,8 @@ package map
 				_params.sendMarkerSelected = displayMapOption.sendMarkerSelected	
 				_params.outLabel = displayMapOption.outLabel	
 				_params.mapTypeId = displayMapOption.mapTypeId
+					
+				_params.simpleButtonUrl	= editSimpleButtonUrl(displayMapOption.simpleButtonUrl)
 					
 					
 				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title
@@ -223,6 +232,20 @@ package map
 				_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
 			}
 			
+		}
+		private function editSimpleButtonUrl(Url_p:String):String
+		{
+			if(Url_p!='' && Url_p!=null)
+			{	
+				var _path:File = File.applicationDirectory.resolvePath(Url_p);
+				var _pathCopy : File = File.createTempFile();
+				if(_path.exists)
+				{			
+					_path.copyTo(_pathCopy, true);
+					return  _pathCopy.url
+				}
+			}
+			return null
 		}
 	}
 }

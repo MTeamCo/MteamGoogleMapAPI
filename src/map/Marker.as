@@ -62,7 +62,7 @@ package map
 			_label = Label_p	
 			_title = Title_p	
 			_id = Id_p
-			if(Icon_p!='')
+			if(Icon_p!='' && Icon_p!=null)
 			{	
 				var _path:File = File.applicationDirectory.resolvePath(Icon_p);
 				var _pathCopy : File = File.createTempFile();

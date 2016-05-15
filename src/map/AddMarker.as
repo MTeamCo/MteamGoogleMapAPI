@@ -66,6 +66,7 @@ package map
 			_str = _str.split("%7D").join("}")
 			_str = _str.split("%5D").join("]")	
 			_str = _str.split("%20").join(" ")
+			_str = _str.split("%2F").join("/")	
 			trace('_Str :',_str)	
 			return JSON.parse(_str)	
 		}

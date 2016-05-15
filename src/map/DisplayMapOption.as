@@ -71,7 +71,9 @@ package map
 					
 		public var defaultZoom:int = 4
 
-		public var location:Vector.<Marker>;			
+		public var location:Vector.<Marker>;	
+		
+		public var simpleButtonUrl:String;
 		
 		
 		public function DisplayMapOption()
