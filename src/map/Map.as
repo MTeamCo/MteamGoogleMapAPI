@@ -194,7 +194,8 @@ package map
 				_params.mapTypeId = displayMapOption.mapTypeId
 					
 				_params.simpleButtonUrl	= editSimpleButtonUrl(displayMapOption.simpleButtonUrl)
-					
+				_params.polyline = displayMapOption.polyline
+				_params.disableDefaultUI = displayMapOption.disableDefaultUI	
 					
 				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title
 				_params.sendBtnWidth = displayMapOption.sendButtonLocation.position.width
@@ -203,6 +204,7 @@ package map
 				_params.sendBtnY = displayMapOption.sendButtonLocation.position.y
 				_params.sendButton = displayMapOption.sendButton
 				_params.fullScreen = _fullScreen
+					
 				if(displayMapOption.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true

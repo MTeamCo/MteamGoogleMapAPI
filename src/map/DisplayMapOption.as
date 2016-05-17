@@ -39,7 +39,7 @@ package map
 
 		///////////////////////
 		public var sendButtonLocation:ButtonStyle = new ButtonStyle('Send Loaction',new Rectangle(10,80,97,30))
-		public var sendButton:Boolean = true	
+		public var sendButton:Boolean = false	
 		////////////////////////
 		
 		public  var area:Rectangle,
@@ -73,6 +73,9 @@ package map
 
 		public var location:Vector.<Marker>;	
 		
+		public var polyline:Boolean = false
+			
+		public var disableDefaultUI:Boolean = true
 		public var simpleButtonUrl:String;
 		
 		
