@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi"/>
     <style type="text/css">
       html, body { 
 	    overflow: hidden;
@@ -94,6 +95,11 @@ function setMarker(Marker_p)
 	});
   }
 
+
+  var infowindow = new google.maps.InfoWindow({
+    content: Marker_p.infowindow
+  });
+
 	marker.addListener('click', function()
 	{	
 	  if(paramsObj.zoomOnSelectMarker>-1)
@@ -104,6 +110,10 @@ function setMarker(Marker_p)
 		if(paramsObj.sendMarkerSelected)
 		{
 			sendMarkerListByeSeletor(Marker_p)
+		}
+		if(Marker_p.infowindow!=null)
+		{
+			 infowindow.open(map, marker);
 		}
 	});	
 }

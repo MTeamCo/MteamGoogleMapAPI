@@ -55,28 +55,53 @@ package map
 		{
 			return _icon
 		}
-		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='',Icon_p:String='')
+		
+		private var _useSetIconPath:Boolean;
+		public function get useSetIconPath():Boolean
+		{
+			return _useSetIconPath
+		}
+		
+		private var _infowindow:String;
+		public function get infowindow():String
+		{
+			return _infowindow
+		}
+			
+		
+		/**infowindow is html format*/
+		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='',Icon_p:String='',UseSetIconPath_p:Boolean=true,Infowindow_p:String=null)
 		{
 			_lat = Lat_p
 			_lng = Lng_p
 			_label = Label_p	
 			_title = Title_p	
 			_id = Id_p
-			if(Icon_p!='' && Icon_p!=null)
-			{	
-				var _path:File = File.applicationDirectory.resolvePath(Icon_p);
-				var _pathCopy : File = File.createTempFile();
-				if(_path.exists)
-				{			
-					_path.copyTo(_pathCopy, true);
-					_icon = _pathCopy.url
-				}
-				else
-				{
-					trace('<<---Marker icons path is not exists and use default Google Map icon--->>')
-					_icon = '';
+			_useSetIconPath = UseSetIconPath_p	
+			_infowindow = Infowindow_p
+			if(UseSetIconPath_p)
+			{
+				if(Icon_p!='' && Icon_p!=null)
+				{	
+					var _path:File = File.applicationDirectory.resolvePath(Icon_p);
+					var _pathCopy : File = File.createTempFile();
+					if(_path.exists)
+					{			
+						_path.copyTo(_pathCopy, true);
+						_icon = _pathCopy.url
+					}
+					else
+					{
+						trace('<<---Marker icons path is not exists and use default Google Map icon--->>')
+						_icon = '';
+					}
 				}
 			}
+			else
+			{
+				_icon = Icon_p
+			}
+
 		}
 	}
 }
