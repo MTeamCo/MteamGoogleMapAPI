@@ -45,14 +45,22 @@ package map
 			this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true))
 			reSetLocatoin(mapStage.location)
 			
-			setLoaction(_urlObject.loaction,_urlObject.fullScreen)
+			if(_urlObject!=null)
+			{		
+				setLoaction(_urlObject.loaction,_urlObject.fullScreen)
+			}
 		}
 		private function reSetLocatoin(Url_p:String)
 		{
 			var _url:String = Url_p.split("?~")[1]
 			if(_url!=null)
 			{	
-				_urlObject = converUrlStrToObj(_url)				
+				_urlObject = converUrlStrToObj(_url)
+				if(_urlObject== null)
+				{
+					this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,null,null))
+					return	
+				}
 				var _selectedMarkder:Marker=null
 				if(_urlObject.seledted!=null)
 				{
@@ -81,8 +89,22 @@ package map
 			_str = _str.split("%5D").join("]")	
 			_str = _str.split("%20").join(" ")
 			_str = _str.split("%2F").join("/")	
-			trace('_Str :',_str)	
-			return JSON.parse(_str)	
+			_str = _str.split("%3C").join("<")
+			_str = _str.split("%3E").join(">")
+			_str = _str.split("%3D%5C").join("=")
+				
+				
+			trace('_Str :',_str)
+			try
+			{
+				
+				return JSON.parse(_str)	
+			}
+			catch(e:Error)
+			{
+				trace('can not pars')
+			}
+			return null
 		}
 		private function listMarker(List_p:Array):Vector.<Marker>
 		{
