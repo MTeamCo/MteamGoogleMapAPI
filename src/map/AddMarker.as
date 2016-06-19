@@ -45,22 +45,14 @@ package map
 			this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true))
 			reSetLocatoin(mapStage.location)
 			
-			if(_urlObject!=null)
-			{		
-				setLoaction(_urlObject.loaction,_urlObject.fullScreen)
-			}
+			setLoaction(_urlObject.loaction,_urlObject.fullScreen)
 		}
 		private function reSetLocatoin(Url_p:String)
 		{
 			var _url:String = Url_p.split("?~")[1]
 			if(_url!=null)
 			{	
-				_urlObject = converUrlStrToObj(_url)
-				if(_urlObject== null)
-				{
-					this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,null,null))
-					return	
-				}
+				_urlObject = JSON.parse(decodeURIComponent(_url))		
 				var _selectedMarkder:Marker=null
 				if(_urlObject.seledted!=null)
 				{
@@ -72,40 +64,11 @@ package map
 						_urlObject.seledted.icon,
 						_urlObject.seledted.useSetIconPath,
 						_urlObject.seledted.infowindow)
-				}
-									
+				}					
 				this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,listMarker(_urlObject.loaction),_selectedMarkder))	
 			}	
 		}
-		private function converUrlStrToObj(Str_p:String):Object
-		{
-			var _str:String = Str_p
-			_str = _str.split("%22").join("\"")
-			_str = _str.split("%7B").join("{")
-			_str = _str.split("%3A").join(":")
-			_str = _str.split("%5B").join("[")
-			_str = _str.split("%2C").join(",")
-			_str = _str.split("%7D").join("}")
-			_str = _str.split("%5D").join("]")	
-			_str = _str.split("%20").join(" ")
-			_str = _str.split("%2F").join("/")	
-			_str = _str.split("%3C").join("<")
-			_str = _str.split("%3E").join(">")
-			_str = _str.split("%3D%5C").join("=")
-				
-				
-			trace('_Str :',_str)
-			try
-			{
-				
-				return JSON.parse(_str)	
-			}
-			catch(e:Error)
-			{
-				trace('can not pars')
-			}
-			return null
-		}
+
 		private function listMarker(List_p:Array):Vector.<Marker>
 		{
 			var _list:Vector.<Marker> = new Vector.<Marker>()

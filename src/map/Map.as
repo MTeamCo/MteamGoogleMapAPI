@@ -173,10 +173,6 @@ package map
 			}
 			counter++;
 			
-			/*for(var i in Obj.createReadAbleObject(_displayMapWindow))
-			{
-				_params[i] = _displayMapWindow
-			}*/
 			
 			var _params:Object = new Object()
 				_params.location = Location_p	
@@ -225,15 +221,16 @@ package map
 						_params.fullScreenTitle= displayMapOption.restoreFullScreenButtonStyle.title
 					}
 				}
-				
-				
+								
 				_params.conter = counter
-			var _paramsJson:String= JSON.stringify(_params)			
+			var _paramsJson:String= JSON.stringify(_params)	
+								
 			if(_mapStage!=null)
 			{		
 				_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
 			}
 			
+
 		}
 		private function editSimpleButtonUrl(Url_p:String):String
 		{
