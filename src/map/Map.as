@@ -48,16 +48,36 @@ package map
 					
 		public static var dataAddress:String,
 							htmlName:String;
+							
+		public static var GPS:GeoLocation = new GeoLocation();					
+							
+					
 		public function Map()
 		{
+		}
+		
+		public static function setup(dataAddress_p:String=null,htmlName_p:String=null,OnGPS_p:Boolean= false,DebugGPS_p:Boolean=false):void
+		{
+			if(dataAddress_p!=null)
+			{
+				dataAddress = dataAddress_p
+			}
+			if(htmlName_p!=null)
+			{
+				htmlName = htmlName_p
+			}
+			
+			if(OnGPS_p)
+			{
 
+				GPS.setup(DebugGPS_p)
+			}
+			
 		}
 		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapOption=null):void
 		{
 			_target = Target_p
-
 			displayMapOption = DisplayMapWindow_p	
-
 			if(displayMapOption.fullscreen == DisplayMapOption.fullScreen.FULLSCREEN)
 			{
 				_fullScreen = true
@@ -66,8 +86,8 @@ package map
 			_movieMap = new MovieClip()
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
-			_target.addChild(_movieMap)		
-			addMarker()	
+			_target.addChild(_movieMap)
+			addMarker()
 		}
 		protected function addMarker():void
 		{

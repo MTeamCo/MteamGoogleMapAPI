@@ -14,10 +14,8 @@ package map
 
 
 		public function AddMarker()
-		{
-						
-			super();	
-				
+		{						
+			super();			
 		}
 		override protected function addMarker():void
 		{
@@ -68,7 +66,6 @@ package map
 				this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,listMarker(_urlObject.loaction),_selectedMarkder))	
 			}	
 		}
-
 		private function listMarker(List_p:Array):Vector.<Marker>
 		{
 			var _list:Vector.<Marker> = new Vector.<Marker>()

@@ -7,7 +7,10 @@ package map
 	{
 		public static const LOAD_COMPELET:String = "LOAD_COMPELET",
 							GET_MARKER_LIST:String = "GET_MARKER_LIST",
-							GEOLOCATION_UPDATE:String = "GEOLOCATION_UPDATE";
+							GEOLOCATION_UPDATE:String = "GEOLOCATION_UPDATE",
+							NOSUPPORTED:String = "NOSUPPORTED",
+							MARKER_ISREADY:String="MARKER_ISREADY",
+							GPS_NO_ACTIVE:String = "GPS_NO_ACTIVE";
 
 		
 		private var _loadCompelet:Boolean;
