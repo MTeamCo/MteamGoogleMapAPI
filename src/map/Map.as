@@ -141,6 +141,18 @@ package map
 				_isHide = true	
 			}
 		}
+		
+		public function visibleMap(Status_p:Boolean):void
+		{
+			if(Status_p)
+			{
+				_mapStage.stage = _stage;
+			}
+			else
+			{
+				_mapStage.stage = null
+			}
+		}
 				
 		protected function showMap():void
 		{
