@@ -171,12 +171,12 @@ package map
 			//_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,canging_fun)
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
 			
-			var parameters:String = '' ;
+			/*var parameters:String = '' ;
 			if(myParam!='')
 			{
 				parameters = '?'+myParam ;
 			}
-			trace('parameters :',parameters)
+			trace('parameters :',parameters)*/
 			
 		
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
@@ -184,7 +184,7 @@ package map
 			{				
 				var _pathCopy : File = File.createTempFile();
 				_path.copyTo(_pathCopy, true);  
-				_mapStage.loadURL(_pathCopy.url+parameters);			
+				_mapStage.loadURL(_pathCopy.url/*+parameters*/);			
 			}
 			else				
 			{		
