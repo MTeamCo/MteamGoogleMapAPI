@@ -9,6 +9,7 @@ package map
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.utils.ByteArray;
 
 	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
 	public class Map extends MovieClip
@@ -157,7 +158,7 @@ package map
 			}
 		}
 				
-		protected function showMap(myParam:String=''):void
+		protected function showMap(myParam:String='undefined'):void
 		{
 			_isHide = false
 			// TODO Auto Generated method stub	
@@ -177,6 +178,7 @@ package map
 			}
 			trace('parameters :',parameters)
 			
+		
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
 			if(DevicePrefrence.isAndroid())
 			{				
@@ -186,7 +188,19 @@ package map
 			}
 			else				
 			{		
-				_mapStage.loadURL(_path.nativePath+parameters);
+				var loadHtmlByte:ByteArray = FileManager.loadFile(_path);
+				var _html:String = loadHtmlByte.toString();
+				_html = _html.split('jkhkhjkhjkhkjhkjhkjhkjhjkhjkhkj').join(myParam)
+				trace('_html :',_html);	
+				//_mapStage.loadURL(_path.nativePath);
+				
+				
+				//_html = "<!DOCTYPE HTML>" + 
+					"<html><body>" + 
+					"<p>King Philip could order five good steaks.</p>" + 
+					"</body></html>"; 
+				//_html = 'salam'
+				_mapStage.loadString(_html);	
 			}
 			trace('load webloader')
 		}
