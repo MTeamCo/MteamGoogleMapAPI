@@ -31,25 +31,35 @@ package map
 					useSetIconPath:index.useSetIconPath,
 					infowindow:index.infowindow})
 			}
+			
+			if(_urlObject.fullScreen==undefined)
+			{
+				_urlObject.fullScreen = _fullScreen
+			}
+			//this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true))
+			setLoaction(_urlObject.loaction,_urlObject.fullScreen)
+		//	reSetLocatoin(mapStage.location)
 		}
 		override protected function onHTMLLoadComplete(event:Event):void
 		{
 			
-			trace('change*********************')
+		/*	trace('change*********************')
 			if(_urlObject.fullScreen==undefined)
 			{
 				_urlObject.fullScreen = _fullScreen
 			}
 			this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true))
-			reSetLocatoin(mapStage.location)
-			
 			setLoaction(_urlObject.loaction,_urlObject.fullScreen)
+			reSetLocatoin(mapStage.location)*/
+			
 		}
 		private function reSetLocatoin(Url_p:String)
 		{
 			var _url:String = Url_p.split("?~")[1]
+			trace('_url :',_url)	
 			if(_url!=null)
 			{	
+				trace('bbbbbbbbbbbbb')
 				_urlObject = JSON.parse(decodeURIComponent(_url))		
 				var _selectedMarkder:Marker=null
 				if(_urlObject.seledted!=null)

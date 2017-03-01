@@ -50,6 +50,8 @@ package map
 							htmlName:String;
 							
 		public static var GPS:GeoLocation = new GeoLocation();					
+
+		private var _params:Object;
 							
 					
 		public function Map()
@@ -87,7 +89,7 @@ package map
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap)
-			addMarker()
+			//addMarker()
 		}
 		protected function addMarker():void
 		{
@@ -125,7 +127,8 @@ package map
 		{
 			// TODO Auto-generated method stub
 			_stage = _movieMap.stage
-			showMap()
+			//showMap()
+			addMarker()
 			_movieMap.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -154,7 +157,7 @@ package map
 			}
 		}
 				
-		protected function showMap():void
+		protected function showMap(myParam:String=''):void
 		{
 			_isHide = false
 			// TODO Auto Generated method stub	
@@ -167,18 +170,25 @@ package map
 			//_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,canging_fun)
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
 			
+			var parameters:String = '' ;
+			if(myParam!='')
+			{
+				parameters = '?'+myParam ;
+			}
+			trace('parameters :',parameters)
 			
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
 			if(DevicePrefrence.isAndroid())
 			{				
 				var _pathCopy : File = File.createTempFile();
 				_path.copyTo(_pathCopy, true);  
-				_mapStage.loadURL(_pathCopy.url);			
+				_mapStage.loadURL(_pathCopy.url+parameters);			
 			}
 			else				
 			{		
-				_mapStage.loadURL(_path.nativePath);
+				_mapStage.loadURL(_path.nativePath+parameters);
 			}
+			trace('load webloader')
 		}
 		/*protected function canging_fun(event:LocationChangeEvent):void
 		{
@@ -194,7 +204,7 @@ package map
 		}
 		protected function setLoaction(Location_p:Array,FullScreen_p:Boolean=false):void 
 		{
-		
+			
 			if(FullScreen_p!=_fullScreen && _mapStage!=null)
 			{
 				_fullScreen = FullScreen_p
@@ -206,7 +216,7 @@ package map
 			counter++;
 			
 			
-			var _params:Object = new Object()
+			_params = new Object()
 				_params.location = Location_p	
 
 				_params.scrollwheel = displayMapOption.scrollwheel
@@ -254,15 +264,27 @@ package map
 					}
 				}
 								
-				_params.conter = counter
+			_params.conter = counter
 			var _paramsJson:String= JSON.stringify(_params)	
-								
+				
+			showMap(_paramsJson);				
+			if(_mapStage!=null)
+			{		
+				//_mapStage.loadURL("javascript:paramsObj="+_paramsJson);
+				//trace('_paramsJson :',_paramsJson)
+			}
+			
+
+		}
+		public function  testDebug():void
+		{
+			var _paramsJson:String= JSON.stringify(_params)	
+			trace('_paramsJson :',_paramsJson)	
+			
 			if(_mapStage!=null)
 			{		
 				_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
 			}
-			
-
 		}
 		private function editSimpleButtonUrl(Url_p:String):String
 		{
