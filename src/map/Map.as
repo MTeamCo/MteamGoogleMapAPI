@@ -205,9 +205,9 @@ package map
 				
 				
 				//_html = "<!DOCTYPE HTML>" + 
-					"<html><body>" + 
-					"<p>King Philip could order five good steaks.</p>" + 
-					"</body></html>"; 
+				//	"<html><body>" + 
+				//	"<p>King Philip could order five good steaks.</p>" + 
+				//	"</body></html>"; 
 				//_html = 'salam'
 				//_mapStage.loadString(_html);	
 			}
