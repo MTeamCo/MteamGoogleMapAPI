@@ -189,10 +189,19 @@ package map
 			else				
 			{		
 				var loadHtmlByte:ByteArray = FileManager.loadFile(_path);
-				var _html:String = loadHtmlByte.toString();
-				_html = _html.split('jkhkhjkhjkhkjhkjhkjhkjhjkhjkhkj').join(myParam)
-				trace('_html :',_html);	
-				//_mapStage.loadURL(_path.nativePath);
+				loadHtmlByte.position = 0 ;
+				trace("loadHtmlByte size : "+loadHtmlByte.length);
+				var _html:String = loadHtmlByte.readUTFBytes(loadHtmlByte.length);
+				_html = _html.split('MY_PARAM_TO_SPLIT_AND_REPLACE').join(myParam);
+				
+				var newHTMLByte:ByteArray = new ByteArray();
+				newHTMLByte.writeUTF(_html);
+				
+				var newHTMLFile:File = File.documentsDirectory.resolvePath('myMap.html') ;
+				
+				FileManager.seveFile(newHTMLFile,newHTMLByte);
+				trace("newHTMLFile.nativePath : "+newHTMLFile.nativePath);
+				_mapStage.loadURL(newHTMLFile.nativePath);
 				
 				
 				//_html = "<!DOCTYPE HTML>" + 
@@ -200,7 +209,7 @@ package map
 					"<p>King Philip could order five good steaks.</p>" + 
 					"</body></html>"; 
 				//_html = 'salam'
-				_mapStage.loadString(_html);	
+				//_mapStage.loadString(_html);	
 			}
 			trace('load webloader')
 		}
