@@ -195,7 +195,7 @@ package map
 				_html = _html.split('MY_PARAM_TO_SPLIT_AND_REPLACE').join(myParam);
 				
 				var newHTMLByte:ByteArray = new ByteArray();
-				newHTMLByte.writeUTF(_html);
+				newHTMLByte.writeUTFBytes(_html);
 				
 				var newHTMLFile:File = File.documentsDirectory.resolvePath('myMap.html') ;
 				
