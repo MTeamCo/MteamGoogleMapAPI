@@ -14,74 +14,49 @@
       html, body { 
 
 	    overflow: hidden;
-
-		height: 100%;
-
-		width: 100%;
-
-		margin: 0;
-
-		padding: 0; 
-
-		}
+height: 100%;
+width: 100%;
+margin: 0;
+padding: 0; 
+}
 
       #map {
-
-		height: 100%; 
+height: 100%; 
 
 	  }
 
 	  #preCenter{
+ position: relative;
+width:200px;
+height:20px;
+top:50%;
+margin: auto;
 
-		 position: relative;
-
-		width:200px;
-
-		height:20px;
-
-		top:50%;
-
-		margin: auto;
-
-		
 
 	
-
-			
+	
 
 	  }
 
 	  #preloader{
 
-		
+border-style:solid;
+border-radius:3px;
+border-color: #666666;
+border-width:2px;
+background-color:#ECECEC
 
-		border-style:solid;
 
-		border-radius:3px;
 
-		border-color: #666666;
-
-		border-width:2px;
-
-		background-color:#ECECEC
-
-		
-
-		
-
-		
 
 	  }
 
 	  #preladerText{
 
 
-
-		color: #333333;
-
-		text-align:center;
-
-		vertical-align: text-top;
+color: #333333;
+text-align:center;
+vertical-align: text-top;
 
 	  }
 
@@ -93,7 +68,6 @@
 
 	<!--img src="preloaders/Internet.gif" alt="Mountain View" style="width:64px;height:64px;position:absolute"-->
 
-		
 
   </head>
 
@@ -104,8 +78,7 @@
  <div id="preCenter"> 
 
 	<div id="preloader">
-
-		  <p id="preladerText">...درحال بارگذاری</p>
+  <p id="preladerText">...درحال بارگذاری</p>
 
 	</div>
 
@@ -164,10 +137,8 @@ function setMarker(Marker_p)
 	if(!paramsObj.showAllMarker)
 
 	{
-
-		setMapOnAll(null);
-
-		markers = [];
+setMapOnAll(null);
+markers = [];
 
 	}
 
@@ -196,16 +167,12 @@ function setMarker(Marker_p)
   {
 
 	map.addListener('center_changed', function() {
-
-		// 3 seconds after the center of the map has changed, pan back to the
-
-		// marker.
+// 3 seconds after the center of the map has changed, pan back to the
+// marker.
 
 	window.setTimeout(function() {
-
-		 map.panTo(marker.getPosition());
-
-		}, paramsObj.backToMarker);
+ map.panTo(marker.getPosition());
+}, paramsObj.backToMarker);
 
 	});
 
@@ -228,30 +195,18 @@ function setMarker(Marker_p)
 	{	
 
 	  if(paramsObj.zoomOnSelectMarker>-1)
-
-		{
-
-			map.setZoom(paramsObj.zoomOnSelectMarker);
-
-			map.setCenter(marker.getPosition());
-
-		}	
-
-		if(paramsObj.sendMarkerSelected)
-
-		{
-
-			sendMarkerListByeSeletor(Marker_p)
-
-		}
-
-		if(Marker_p.infowindow!=null)
-
-		{
-
-			 infowindow.open(map, marker);
-
-		}
+{
+	map.setZoom(paramsObj.zoomOnSelectMarker);
+	map.setCenter(marker.getPosition());
+}	
+if(paramsObj.sendMarkerSelected)
+{
+	sendMarkerListByeSeletor(Marker_p)
+}
+if(Marker_p.infowindow!=null)
+{
+	 infowindow.open(map, marker);
+}
 
 	});	
 
@@ -270,16 +225,14 @@ function label(loaction)
 	if(paramsObj.outLabel)
 
 	{
-
-		addLable = labels[labelIndex++ % labels.length]
+addLable = labels[labelIndex++ % labels.length]
 
 	}
 
 	else
 
 	{
-
-		addLable = loaction.label
+addLable = loaction.label
 
 	}
 
@@ -332,216 +285,118 @@ intM = true;
 	if(paramsObj!=undefined)
 
 	{
-
-		if(paramsObj.sendButton)
-
-		{
-
-			var sendButton = document.getElementsByClassName("send")
-
-			var t = document.createTextNode(paramsObj.sendBtnTitle);
-
-			
-
-			document.getElementById("sendText").appendChild(t);
-
-			
-
-			sendButton[0].style.backgroundColor ="#ffffff";
-
-			sendButton[0].style.borderRadius  = "3px";
-
-			
-
-			sendButton[0].style.borderStyle="solid";
-
-			sendButton[0].style.borderColor="rgba(0,0,0,0.3)";
-
-			sendButton[0].style.borderTopStyle="none"
-
-			sendButton[0].style.borderLeftStyle="none"
-
-			sendButton[0].style.borderWidth="2px";
+if(paramsObj.sendButton)
+{
+	var sendButton = document.getElementsByClassName("send")
+	var t = document.createTextNode(paramsObj.sendBtnTitle);
+	
+	document.getElementById("sendText").appendChild(t);
+	
+	sendButton[0].style.backgroundColor ="#ffffff";
+	sendButton[0].style.borderRadius  = "3px";
+	
+	sendButton[0].style.borderStyle="solid";
+	sendButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	sendButton[0].style.borderTopStyle="none"
+	sendButton[0].style.borderLeftStyle="none"
+	sendButton[0].style.borderWidth="2px";
 
 
 
 
-
-			sendButton[0].style.fontSize = "small";
-
-			sendButton[0].style.font = "arial";
-
-			document.getElementById("sendText").style.color = "#333333"
-
-			sendButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
-
-		  
-
-			sendButton[0].style.top = paramsObj.sendBtnY+"px";
-
-			sendButton[0].style.left = paramsObj.sendBtnX+"px";
-
-			sendButton[0].style.width = paramsObj.sendBtnWidth+"px"
-
-			sendButton[0].style.height = paramsObj.sendBtnHeight+"px"
-
-				
-
-			sendButton[0].style.verticalAlign="center";
-
-			sendButton[0].style.textAlign = "center";
-
-			sendButton[0].style.position = "absolute";
-
+	sendButton[0].style.fontSize = "small";
+	sendButton[0].style.font = "arial";
+	document.getElementById("sendText").style.color = "#333333"
+	sendButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	sendButton[0].style.top = paramsObj.sendBtnY+"px";
+	sendButton[0].style.left = paramsObj.sendBtnX+"px";
+	sendButton[0].style.width = paramsObj.sendBtnWidth+"px"
+	sendButton[0].style.height = paramsObj.sendBtnHeight+"px"
 		
+	sendButton[0].style.verticalAlign="center";
+	sendButton[0].style.textAlign = "center";
+	sendButton[0].style.position = "absolute";
 
 
 
-		}
+}
 
 
-
-		if(paramsObj.fullScreenStatus)
-
-		{	
-
-			var fullScreenButton = document.getElementsByClassName("fullScreenId")
-
-			var fullScreenText = document.createTextNode(paramsObj.fullScreenTitle);
-
-			
-
-			document.getElementById("fullScreenText").appendChild(fullScreenText);
-
-			
-
-			fullScreenButton[0].style.backgroundColor ="#ffffff";
-
-			fullScreenButton[0].style.borderRadius  = "3px";
-
-			
-
-			fullScreenButton[0].style.borderStyle="solid";
-
-			fullScreenButton[0].style.borderColor="rgba(0,0,0,0.3)";
-
-			fullScreenButton[0].style.borderTopStyle="none"
-
-			fullScreenButton[0].style.borderLeftStyle="none"
-
-			fullScreenButton[0].style.borderWidth="2px";
+if(paramsObj.fullScreenStatus)
+{	
+	var fullScreenButton = document.getElementsByClassName("fullScreenId")
+	var fullScreenText = document.createTextNode(paramsObj.fullScreenTitle);
+	
+	document.getElementById("fullScreenText").appendChild(fullScreenText);
+	
+	fullScreenButton[0].style.backgroundColor ="#ffffff";
+	fullScreenButton[0].style.borderRadius  = "3px";
+	
+	fullScreenButton[0].style.borderStyle="solid";
+	fullScreenButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	fullScreenButton[0].style.borderTopStyle="none"
+	fullScreenButton[0].style.borderLeftStyle="none"
+	fullScreenButton[0].style.borderWidth="2px";
 
 
 
 
-
-			fullScreenButton[0].style.fontSize = "small";
-
-			fullScreenButton[0].style.font = "arial";
-
-			document.getElementById("fullScreenText").style.color = "#333333"
-
-			fullScreenButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
-
-		  
-
-			fullScreenButton[0].style.top = paramsObj.fullScreenBtnStyleY+"px";
-
-			fullScreenButton[0].style.left = paramsObj.fullScreenBtnStyleX+"px";
-
-			fullScreenButton[0].style.width = paramsObj.fullScreenBtnStyleWidth+"px"
-
-			fullScreenButton[0].style.height = paramsObj.fullScreenBtnStyleHeight+"px"
-
-				
-
-			fullScreenButton[0].style.verticalAlign="center";
-
-			fullScreenButton[0].style.textAlign = "center";
-
-			fullScreenButton[0].style.position = "absolute";
-
+	fullScreenButton[0].style.fontSize = "small";
+	fullScreenButton[0].style.font = "arial";
+	document.getElementById("fullScreenText").style.color = "#333333"
+	fullScreenButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	fullScreenButton[0].style.top = paramsObj.fullScreenBtnStyleY+"px";
+	fullScreenButton[0].style.left = paramsObj.fullScreenBtnStyleX+"px";
+	fullScreenButton[0].style.width = paramsObj.fullScreenBtnStyleWidth+"px"
+	fullScreenButton[0].style.height = paramsObj.fullScreenBtnStyleHeight+"px"
 		
+	fullScreenButton[0].style.verticalAlign="center";
+	fullScreenButton[0].style.textAlign = "center";
+	fullScreenButton[0].style.position = "absolute";
 
-		}
+}
 
+var mapTypeId
+if(paramsObj.mapTypeId == "SATELLITE")
+{
+	mapTypeId = google.maps.MapTypeId.SATELLITE
+}
+if(paramsObj.mapTypeId=="MAP")
+{
+	mapTypeId = google.maps.MapTypeId.MAP
+}
+if(paramsObj.location.length>0)
+{
+	//alert(paramsObj.location.length)
+	var myLatLng = paramsObj.location[paramsObj.location.length-1]//{lat: paramsObj.lat, lng: paramsObj.lng};
+	
+	
+  // Create a map object and specify the DOM element for display.
+	map = new google.maps.Map(document.getElementById('map'), {
+	center: myLatLng,scrollwheel:paramsObj.scrollwheel,zoom:paramsObj.zoom,mapTypeId:mapTypeId,disableDefaultUI: paramsObj.disableDefaultUI});
+}
+
+
+	
+if(paramsObj.marker)
+ {
+	
+	for (i=0;i<paramsObj.location.length;i++) 
+	{
 		
-
-		var mapTypeId
-
-		if(paramsObj.mapTypeId == "SATELLITE")
-
-		{
-
-			mapTypeId = google.maps.MapTypeId.SATELLITE
-
-		}
-
-		if(paramsObj.mapTypeId=="MAP")
-
-		{
-
-			mapTypeId = google.maps.MapTypeId.MAP
-
-		}
-
-		if(paramsObj.location.length>0)
-
-		{
-
-			//alert(paramsObj.location.length)
-
-			var myLatLng = paramsObj.location[paramsObj.location.length-1]//{lat: paramsObj.lat, lng: paramsObj.lng};
-
-			
-
-			
-
-		  // Create a map object and specify the DOM element for display.
-
-			map = new google.maps.Map(document.getElementById('map'), {
-
-			center: myLatLng,scrollwheel:paramsObj.scrollwheel,zoom:paramsObj.zoom,mapTypeId:mapTypeId,disableDefaultUI: paramsObj.disableDefaultUI});
-
-		}
-
-
-
-			
-
-		if(paramsObj.marker)
-
-		 {
-
-			
-
-			for (i=0;i<paramsObj.location.length;i++) 
-
-			{
-
-				
-
-				label(paramsObj.location[i])
-
-				setMarker(paramsObj.location[i])
-
-				
-
-				
-
-			}
-
-		 }
-
+		label(paramsObj.location[i])
+		setMarker(paramsObj.location[i])
 		
+		
+	}
+ }
 
-		map.addListener('click', function(e) 
-
-		{
-
-			placeMarkerAndPanTo(e.latLng);	
-
-		}); 
+map.addListener('click', function(e) 
+{
+	placeMarkerAndPanTo(e.latLng);	
+}); 
 
 	}
 
@@ -552,48 +407,30 @@ intM = true;
 	
 
 	alert("*6");
-
-		var param = {lat: 31, lng: 51};
-
-		var map2 = new google.maps.Map(document.getElementById('map'), {
-
-		center: param,
-
-		scrollwheel: false,
-
-		zoom: 4
+var param = {lat: 31, lng: 51};
+var map2 = new google.maps.Map(document.getElementById('map'), {
+center: param,
+scrollwheel: false,
+zoom: 4
 
 	  });
 
 
 
 	  // Create a marker and set its position.
-
-		  var marker = new google.maps.Marker({
-
-			map: map2,
-
-			position: param,
-
-			title: 'Hello World!'
-
-		  });
-
-		  
-
-		/*  var intMapStatus = window.location.href.split('?~')[1]
-
-		 // alert('intMapStatus :'+intMapStatus)
-
-			if(intMapStatus==undefined)
-
-			{
-
-				document.location = ("?~intMap");
-
-			}*/
-
-		    	  
+  var marker = new google.maps.Marker({
+	map: map2,
+	position: param,
+	title: 'Hello World!'
+  });
+  
+/*  var intMapStatus = window.location.href.split('?~')[1]
+ // alert('intMapStatus :'+intMapStatus)
+	if(intMapStatus==undefined)
+	{
+		document.location = ("?~intMap");
+	}*/
+    	  
 
 	}	
 
@@ -612,18 +449,12 @@ function placeMarkerAndPanTo(loaction)
 	if(paramsObj.markerAndPanTo)
 
 	{
-
-		var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
-
-		pointArray.push(newMarker)
-
-		setMarker(newMarker)
-
-		var sendButton = document.getElementsByClassName("send")
-
-		sendButton[0].style.backgroundColor ="#F60B31";
-
-		document.getElementById("sendText").style.color = "#ffffff"
+var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
+pointArray.push(newMarker)
+setMarker(newMarker)
+var sendButton = document.getElementsByClassName("send")
+sendButton[0].style.backgroundColor ="#F60B31";
+document.getElementById("sendText").style.color = "#ffffff"
 
 	}
 
@@ -744,30 +575,18 @@ function sendMarkerList()
 function cheker()
 
 {
+window.setTimeout(function() {
 
-		window.setTimeout(function() {
+if(paramsObj!=undefined && intM)
+{
+	initMap()
+}
+else
+{
+	cheker()
+}
 
-		
-
-		if(paramsObj!=undefined && intM)
-
-		{
-
-			initMap()
-
-		}
-
-		else
-
-		{
-
-			cheker()
-
-		}
-
-		
-
-		}, 100);
+}, 100);
 
 }
 
