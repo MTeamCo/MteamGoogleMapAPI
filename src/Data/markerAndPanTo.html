@@ -62,7 +62,14 @@ var map
 var markers = [];
 var pointArray = [];
 var intM=false
-var paramsObj
+var paramsObj = "MY_PARAM_TO_SPLIT_AND_REPLACE";
+try
+{
+	if(paramsObj.indexOf("MY")==0)
+	{
+		paramsObj = undefined ;
+	}
+}catch(e){}
 var fullScreen=false
 
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -137,7 +144,8 @@ function setMap(params) {
 	paramsObj = params
 	pointArray = paramsObj.location
 }
-function runMap()
+
+function initMap()
 {
 
    
@@ -286,15 +294,22 @@ window.onhashchange = function() {
 
 
 
-
+function fullScreenFun()
+{
+	paramsObj.fullScreen = !paramsObj.fullScreen
+	sendMarkerList()
+}
 // send new change url
 function sendMarkerListByeSeletor(MarkerSelected_p)
 {
 	var locObj = {loaction:pointArray,seledted:MarkerSelected_p,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
 	
-	    document.location = (
-      "?~" + encodeURIComponent(loactionStr));
+	  //  document.location = (
+    //  "?~" + encodeURIComponent(loactionStr));
+	//  alert('change 1:'+loactionStr)
+	 // window.location.hash = loactionStr;
+	  window.location = "unknown:/"+loactionStr ;
 }
 
 function sendMarkerList()
@@ -302,35 +317,11 @@ function sendMarkerList()
 	var locObj = {loaction:pointArray,seledted:null,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
 	
-	    document.location = (
-      "?~" + encodeURIComponent(loactionStr));
-}
-function initMap() {
+	 //   document.location = (
+    // "?~" + encodeURIComponent(loactionStr));
+	// window.location.hash = loactionStr;
+	  window.location = "unknown:/"+loactionStr ;
 	
-	//alert(paramsObj.mapTypeId)
-	intM = true
-}
-
-cheker()
-function cheker()
-{
-		window.setTimeout(function() {
-		
-		if(paramsObj!=undefined && intM)
-		{
-			runMap()
-		}
-		else
-		{
-			cheker()
-		}
-		
-		}, 100);
-}
-function fullScreenFun()
-{
-	paramsObj.fullScreen = !paramsObj.fullScreen
-	sendMarkerList()
 }
  </script>
     <script id = "map" async defer
