@@ -3,7 +3,9 @@ package map
 	import com.mteamapp.JSONParser;
 	
 	import flash.display.MovieClip;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.LocationChangeEvent;
 	import flash.geom.Rectangle;
 	import flash.text.ReturnKeyLabel;
 
@@ -11,7 +13,7 @@ package map
 	public class AddMarker extends Map
 	{
 		private var _urlObject:Object=new Object();
-
+		
 
 		public function AddMarker()
 		{						
@@ -31,26 +33,27 @@ package map
 					useSetIconPath:index.useSetIconPath,
 					infowindow:index.infowindow})
 			}
-		}
-		override protected function onHTMLLoadComplete(event:Event):void
+		}		
+		override protected function changing_fun(event:LocationChangeEvent):void
 		{
-			
-			trace('change*********************')
-			if(_urlObject.fullScreen==undefined)
+			getLocation(event.location);
+		}
+		
+		override protected function error(event:ErrorEvent):void
+		{
+			getLocation(event.text);
+		}
+		
+		private function getLocation(location_p:String):void
+		{
+			if(location_p.indexOf("unknown:/")==-1)
 			{
-				_urlObject.fullScreen = _fullScreen
+				return 
 			}
-			this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true))
-			reSetLocatoin(mapStage.location)
-			
-			setLoaction(_urlObject.loaction,_urlObject.fullScreen)
-		}
-		private function reSetLocatoin(Url_p:String)
-		{
-			var _url:String = Url_p.split("?~")[1]
+			var _url:String = location_p.split("unknown:/")[1]
 			if(_url!=null)
 			{	
-				_urlObject = JSON.parse(decodeURIComponent(_url))		
+				_urlObject = JSON.parse(decodeURIComponent(_url));	
 				var _selectedMarkder:Marker=null
 				if(_urlObject.seledted!=null)
 				{
@@ -59,13 +62,22 @@ package map
 						_urlObject.seledted.id,
 						_urlObject.seledted.label,
 						_urlObject.seledted.title,
-						_urlObject.seledted.icon,
-						_urlObject.seledted.useSetIconPath,
-						_urlObject.seledted.infowindow)
-				}					
-				this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,listMarker(_urlObject.loaction),_selectedMarkder))	
+						_urlObject.seledted.icon)
+				}
+				if(_fullScreen ==_urlObject.fullScreen)
+				{
+					this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,listMarker(_urlObject.loaction),_selectedMarkder));
+				}
+				else
+				{
+					_fullScreen = _urlObject.fullScreen;
+					setFullScreen();
+					changeFulScreen();
+				}
+				reloadMap(_urlObject.loaction);
 			}	
 		}
+
 		private function listMarker(List_p:Array):Vector.<Marker>
 		{
 			var _list:Vector.<Marker> = new Vector.<Marker>()
