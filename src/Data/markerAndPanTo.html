@@ -56,7 +56,17 @@
 	</div>
 </div>
    <div id="map"></div>
-   
+   <table class="fullScreenId">
+  <tr>
+    <td <a onclick="fullScreenFun()" id="fullScreenText">&nbsp;</a></td>
+  </tr>
+</table>	
+	
+<table class="send">
+  <tr>
+    <td <a onclick="sendMarkerList()" id="sendText">&nbsp;</a></td>
+  </tr>
+</table>
  <script type="text/javascript">
 var map
 var markers = [];
@@ -138,17 +148,20 @@ function label(loaction)
 		addLable = loaction.label
 	}
 }
-function setMap(params) {
+/*function setMap(params) {
 	document.getElementById("preCenter").style.visibility = "hidden";	
 	document.getElementById("preCenter").style.position = "absolute";
 	paramsObj = params
 	pointArray = paramsObj.location
-}
+}*/
 
 function initMap()
 {
+	document.getElementById("preCenter").style.visibility = "hidden";	
+	document.getElementById("preCenter").style.position = "absolute";
 
-   
+	pointArray = paramsObj.location
+
 	if(paramsObj.sendButton)
 	{
 	var sendButton = document.getElementsByClassName("send")
@@ -182,6 +195,7 @@ function initMap()
 	
 
 	}
+	   
 
 	if(paramsObj.fullScreenStatus)
 	{	
@@ -234,7 +248,9 @@ function initMap()
 	  // Create a map object and specify the DOM element for display.
 		map = new google.maps.Map(document.getElementById('map'), {
 		center: myLatLng,scrollwheel:paramsObj.scrollwheel,zoom:paramsObj.zoom,mapTypeId:mapTypeId,disableDefaultUI: paramsObj.disableDefaultUI});
+		
 	}
+	
 
 		
 	if(paramsObj.marker)
@@ -285,12 +301,12 @@ function setMapOnAll(map) {
 
 
 // get change url
-window.onhashchange = function() {
+/*window.onhashchange = function() {
     var newHash = window.location.hash.substring(1);
 	newHash = newHash.split("%22").join("\"")
 	var params = JSON.parse(newHash);
 	 setMap(params)	
-};
+};*/
 
 
 
@@ -304,41 +320,20 @@ function sendMarkerListByeSeletor(MarkerSelected_p)
 {
 	var locObj = {loaction:pointArray,seledted:MarkerSelected_p,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
-	
-	  //  document.location = (
-    //  "?~" + encodeURIComponent(loactionStr));
-	//  alert('change 1:'+loactionStr)
-	 // window.location.hash = loactionStr;
-	  window.location = "unknown:/"+loactionStr ;
+	window.location = "unknown:/"+loactionStr ;
+
+	  
 }
 
 function sendMarkerList()
 {
 	var locObj = {loaction:pointArray,seledted:null,fullScreen:paramsObj.fullScreen}
 	var loactionStr = JSON.stringify(locObj)
-	
-	 //   document.location = (
-    // "?~" + encodeURIComponent(loactionStr));
-	// window.location.hash = loactionStr;
-	  window.location = "unknown:/"+loactionStr ;
+	window.location = "unknown:/"+loactionStr ;
+
 	
 }
  </script>
-    <script id = "map" async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap">
-    </script>
-
-	
-<table class="fullScreenId">
-  <tr>
-    <td <a onclick="fullScreenFun()" id="fullScreenText">&nbsp;</a></td>
-  </tr>
-</table>	
-	
-<table class="send">
-  <tr>
-    <td <a onclick="sendMarkerList()" id="sendText">&nbsp;</a></td>
-  </tr>
-</table>
+    <script id = "map" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap"></script>
   </body>
 </html>
