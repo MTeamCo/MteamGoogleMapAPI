@@ -1,14 +1,18 @@
 package map
 {
+	import contents.TextFile;
+	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.LocationChangeEvent;
 	import flash.filesystem.File;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.utils.ByteArray;
 
 	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
 	public class Map extends MovieClip
@@ -17,7 +21,7 @@ package map
 		
 		
 		
-
+	//	protected var myObject:Object = null
 		
 		protected var displayMapOption:DisplayMapOption = new DisplayMapOption()
 		public function set displayMapWindow(DisplayMapOption_p:DisplayMapOption):void
@@ -48,6 +52,9 @@ package map
 					
 		public static var dataAddress:String,
 							htmlName:String;
+							
+							
+		private var _htmlString:String;					
 							
 		public static var GPS:GeoLocation = new GeoLocation();					
 							
@@ -87,7 +94,7 @@ package map
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap)
-			addMarker()
+			addMarker();
 		}
 		protected function addMarker():void
 		{
@@ -103,7 +110,11 @@ package map
 				_mapStage.stage = _stage;
 			}
 		}
-		private function setFullScreen():void
+		protected function changeFulScreen():void
+		{
+			_mapStage.viewPort = displayMapOption.viewPort;	
+		}
+		protected function setFullScreen():void
 		{
 			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
@@ -164,50 +175,68 @@ package map
 				
 			_mapStage.stage = _stage;
 			
-			//_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,canging_fun)
+			
+			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun)
+			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGE,change_fun)		
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
+			
+			_mapStage.addEventListener(ErrorEvent.ERROR,error)
 			
 			
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
-			if(DevicePrefrence.isAndroid())
-			{				
-				var _pathCopy : File = File.createTempFile();
-				_path.copyTo(_pathCopy, true);  
-				_mapStage.loadURL(_pathCopy.url);			
+			
+			var loadHtmlByte:ByteArray = FileManager.loadFile(_path);
+			loadHtmlByte.position = 0 ;
+			trace("loadHtmlByte size : "+loadHtmlByte.length);
+			_htmlString = loadHtmlByte.readUTFBytes(loadHtmlByte.length);
+
+			var loc:Array = new Array();
+			for(var i:int=0;i<displayMapOption.location.length;i++)
+			{
+				loc.push(displayMapOption.location[i]);
 			}
-			else				
-			{		
-				_mapStage.loadURL(_path.nativePath);
-			}
+			
+			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(loc));
+			_mapStage.loadString(_html)
+				
 		}
-		/*protected function canging_fun(event:LocationChangeEvent):void
+
+		protected function reloadMap(Location_p:Array):void
+		{
+			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
+			_mapStage.loadString(_html);
+		}
+		protected function error(event:ErrorEvent):void
 		{
 			// TODO Auto-generated method stub
-			trace('location changing :',event.location)
+			//trace('erorrorrrrrrrrrrr :',event.text)
+		}
 		
-		}*/
+		protected function change_fun(event:LocationChangeEvent):void
+		{
+			// TODO Auto-generated method stub
+			//trace('location change true:',event.location)
+		}
+		protected function changing_fun(event:LocationChangeEvent):void
+		{
+			// TODO Auto-generated method stub
+			//trace('location changing2222 :',event.location)
+			
+			
+		}
 		
 		protected function onHTMLLoadComplete(event:Event):void
 		{
 			// TODO Auto-generated method stub
 			
 		}
-		protected function setLoaction(Location_p:Array,FullScreen_p:Boolean=false):void 
+		protected function setLoaction(Location_p:Array):String 
 		{
-		
-			if(FullScreen_p!=_fullScreen && _mapStage!=null)
-			{
-				_fullScreen = FullScreen_p
-				setFullScreen()
-				_mapStage.viewPort = displayMapOption.viewPort		
-				_mapStage.stage = _stage;
-				_mapStage.reload()
-			}
-			counter++;
-			
-			
-			var _params:Object = new Object()
-				_params.location = Location_p	
+			counter++;		
+			var _params:Object = new Object();
+				
+				
+				_params.location = Location_p;	
 
 				_params.scrollwheel = displayMapOption.scrollwheel
 				_params.zoom = displayMapOption.defaultZoom	
@@ -256,11 +285,8 @@ package map
 								
 				_params.conter = counter
 			var _paramsJson:String= JSON.stringify(_params)	
-								
-			if(_mapStage!=null)
-			{		
-				_mapStage.loadURL("javascript:setMap("+_paramsJson+")");
-			}
+										
+			return _paramsJson;
 			
 
 		}
