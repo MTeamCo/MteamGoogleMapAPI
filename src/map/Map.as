@@ -204,7 +204,10 @@ package map
 		protected function reloadMap(Location_p:Array):void
 		{
 			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
-			_mapStage.loadString(_html);
+			if(_mapStage!=null)
+			{
+				_mapStage.loadString(_html);
+			}
 		}
 		protected function error(event:ErrorEvent):void
 		{
