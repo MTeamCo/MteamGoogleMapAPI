@@ -63,7 +63,7 @@ package map
 		{
 		}
 		
-		public static function setup(dataAddress_p:String=null,htmlName_p:String=null,OnGPS_p:Boolean= false,DebugGPS_p:Boolean=false):void
+		public static function setup(dataAddress_p:String=null,htmlName_p:String=null,OnGPS_p:Boolean= false):void
 		{
 			if(dataAddress_p!=null)
 			{
@@ -76,8 +76,15 @@ package map
 			
 			if(OnGPS_p)
 			{
-
-				GPS.setup(DebugGPS_p)
+				if(DevicePrefrence.isItPC)
+				{
+					GPS.setup();
+				}
+				else
+				{
+					GPS.setup(false);
+				}
+				
 			}
 			
 		}
@@ -169,7 +176,7 @@ package map
 		{
 			_isHide = false
 			// TODO Auto Generated method stub	
-			_mapStage = new StageWebView();
+			_mapStage = new StageWebView(false);
 				
 			_mapStage.viewPort = displayMapOption.viewPort
 				
@@ -206,6 +213,7 @@ package map
 			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
 			if(_mapStage!=null)
 			{
+				//trace('_html :',_html)
 				_mapStage.loadString(_html);
 			}
 		}
@@ -217,6 +225,7 @@ package map
 		
 		protected function change_fun(event:LocationChangeEvent):void
 		{
+			trace('change')
 			// TODO Auto-generated method stub
 			//trace('location change true:',event.location)
 		}
