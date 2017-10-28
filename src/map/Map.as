@@ -273,6 +273,7 @@ package map
 				_params.sendBtnY = displayMapOption.sendButtonLocation.position.y
 				_params.sendButton = displayMapOption.sendButton
 				_params.fullScreen = _fullScreen
+				_params.searchBox = displayMapOption.searchBox;	
 					
 				if(displayMapOption.fullScreenArea!=null)
 				{
