@@ -67,11 +67,11 @@ package map
 		{
 			if(dataAddress_p!=null)
 			{
-				dataAddress = dataAddress_p
+				dataAddress = dataAddress_p;
 			}
 			if(htmlName_p!=null)
 			{
-				htmlName = htmlName_p
+				htmlName = htmlName_p;
 			}
 			
 			if(OnGPS_p)
@@ -90,17 +90,17 @@ package map
 		}
 		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapOption=null):void
 		{
-			_target = Target_p
-			displayMapOption = DisplayMapWindow_p	
+			_target = Target_p;
+			displayMapOption = DisplayMapWindow_p;	
 			if(displayMapOption.fullscreen == DisplayMapOption.fullScreen.FULLSCREEN)
 			{
-				_fullScreen = true
+				_fullScreen = true;
 			}
-			setFullScreen()
-			_movieMap = new MovieClip()
+			setFullScreen();;
+			_movieMap = new MovieClip();
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
-			_target.addChild(_movieMap)
+			_target.addChild(_movieMap);
 			addMarker();
 		}
 		protected function addMarker():void
@@ -111,9 +111,9 @@ package map
 		{
 			if(_mapStage!=null)
 			{
-				displayMapOption = DisplayMapWindow_p	
-				displayMapOption.viewPort = displayMapOption.area
-				_mapStage.viewPort = displayMapOption.viewPort				
+				displayMapOption = DisplayMapWindow_p;	
+				displayMapOption.viewPort = displayMapOption.area;
+				_mapStage.viewPort = displayMapOption.viewPort;				
 				_mapStage.stage = _stage;
 			}
 		}
@@ -125,11 +125,11 @@ package map
 		{
 			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
-				displayMapOption.viewPort = displayMapOption.fullScreenArea	
+				displayMapOption.viewPort = displayMapOption.fullScreenArea;	
 			}
 			else
 			{
-				displayMapOption.viewPort = displayMapOption.area	
+				displayMapOption.viewPort = displayMapOption.area;	
 			}
 
 		}
@@ -142,8 +142,8 @@ package map
 		protected function onAddedToStage(event:Event):void
 		{
 			// TODO Auto-generated method stub
-			_stage = _movieMap.stage
-			showMap()
+			_stage = _movieMap.stage;
+			showMap();
 			_movieMap.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -174,20 +174,20 @@ package map
 				
 		protected function showMap():void
 		{
-			_isHide = false
+			_isHide = false;
 			// TODO Auto Generated method stub	
 			_mapStage = new StageWebView(false);
 				
-			_mapStage.viewPort = displayMapOption.viewPort
+			_mapStage.viewPort = displayMapOption.viewPort;
 				
 			_mapStage.stage = _stage;
 			
 			
-			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun)
-			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGE,change_fun)		
+			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun);
+			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGE,change_fun);		
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
 			
-			_mapStage.addEventListener(ErrorEvent.ERROR,error)
+			_mapStage.addEventListener(ErrorEvent.ERROR,error);
 			
 			
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
@@ -204,7 +204,7 @@ package map
 			}
 			
 			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(loc));
-			_mapStage.loadString(_html)
+			_mapStage.loadString(_html);
 				
 		}
 
@@ -250,54 +250,54 @@ package map
 				
 				_params.location = Location_p;	
 
-				_params.scrollwheel = displayMapOption.scrollwheel
-				_params.zoom = displayMapOption.defaultZoom	
-				_params.marker = displayMapOption.marker
-				_params.showAllMarker = displayMapOption.showAllMarker
-				_params.panTo = displayMapOption.panTo
-				_params.markerAndPanTo = displayMapOption.markerAndPanTo
-				_params.backToMarker = displayMapOption.backToMarker	
-				_params.zoomOnSelectMarker = displayMapOption.zoomOnSelectMarker
-				_params.sendMarkerSelected = displayMapOption.sendMarkerSelected	
-				_params.outLabel = displayMapOption.outLabel	
-				_params.mapTypeId = displayMapOption.mapTypeId
+				_params.scrollwheel = displayMapOption.scrollwheel;
+				_params.zoom = displayMapOption.defaultZoom	;
+				_params.marker = displayMapOption.marker;
+				_params.showAllMarker = displayMapOption.showAllMarker;
+				_params.panTo = displayMapOption.panTo;
+				_params.markerAndPanTo = displayMapOption.markerAndPanTo;
+				_params.backToMarker = displayMapOption.backToMarker;	
+				_params.zoomOnSelectMarker = displayMapOption.zoomOnSelectMarker;
+				_params.sendMarkerSelected = displayMapOption.sendMarkerSelected;	
+				_params.outLabel = displayMapOption.outLabel;	
+				_params.mapTypeId = displayMapOption.mapTypeId;
 					
-				_params.simpleButtonUrl	= editSimpleButtonUrl(displayMapOption.simpleButtonUrl)
-				_params.polyline = displayMapOption.polyline
-				_params.disableDefaultUI = displayMapOption.disableDefaultUI	
+				_params.simpleButtonUrl	= editSimpleButtonUrl(displayMapOption.simpleButtonUrl);
+				_params.polyline = displayMapOption.polyline;
+				_params.disableDefaultUI = displayMapOption.disableDefaultUI;	
 					
-				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title
-				_params.sendBtnWidth = displayMapOption.sendButtonLocation.position.width
-				_params.sendBtnHeight = displayMapOption.sendButtonLocation.position.height
-				_params.sendBtnX = displayMapOption.sendButtonLocation.position.x
-				_params.sendBtnY = displayMapOption.sendButtonLocation.position.y
-				_params.sendButton = displayMapOption.sendButton
-				_params.fullScreen = _fullScreen
+				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title;
+				_params.sendBtnWidth = displayMapOption.sendButtonLocation.position.width;
+				_params.sendBtnHeight = displayMapOption.sendButtonLocation.position.height;
+				_params.sendBtnX = displayMapOption.sendButtonLocation.position.x;
+				_params.sendBtnY = displayMapOption.sendButtonLocation.position.y;
+				_params.sendButton = displayMapOption.sendButton;
+				_params.fullScreen = _fullScreen;
 				_params.searchBox = displayMapOption.searchBox;	
 					
 				if(displayMapOption.fullScreenArea!=null)
 				{
-					_params.fullScreenStatus=true
+					_params.fullScreenStatus=true;
 					if(!_fullScreen)
 					{
-						_params.fullScreenBtnStyleWidth = displayMapOption.fullScreenButtonStyle.position.width
-						_params.fullScreenBtnStyleHeight= displayMapOption.fullScreenButtonStyle.position.height
-						_params.fullScreenBtnStyleX= displayMapOption.fullScreenButtonStyle.position.x
-						_params.fullScreenBtnStyleY= displayMapOption.fullScreenButtonStyle.position.y
-						_params.fullScreenTitle= displayMapOption.fullScreenButtonStyle.title
+						_params.fullScreenBtnStyleWidth = displayMapOption.fullScreenButtonStyle.position.width;
+						_params.fullScreenBtnStyleHeight= displayMapOption.fullScreenButtonStyle.position.height;
+						_params.fullScreenBtnStyleX= displayMapOption.fullScreenButtonStyle.position.x;
+						_params.fullScreenBtnStyleY= displayMapOption.fullScreenButtonStyle.position.y;
+						_params.fullScreenTitle= displayMapOption.fullScreenButtonStyle.title;
 					}
 					else
 					{
-						_params.fullScreenBtnStyleWidth = displayMapOption.restoreFullScreenButtonStyle.position.width
-						_params.fullScreenBtnStyleHeight= displayMapOption.restoreFullScreenButtonStyle.position.height
-						_params.fullScreenBtnStyleX= displayMapOption.restoreFullScreenButtonStyle.position.x
-						_params.fullScreenBtnStyleY= displayMapOption.restoreFullScreenButtonStyle.position.y
-						_params.fullScreenTitle= displayMapOption.restoreFullScreenButtonStyle.title
+						_params.fullScreenBtnStyleWidth = displayMapOption.restoreFullScreenButtonStyle.position.width;
+						_params.fullScreenBtnStyleHeight= displayMapOption.restoreFullScreenButtonStyle.position.height;
+						_params.fullScreenBtnStyleX= displayMapOption.restoreFullScreenButtonStyle.position.x;
+						_params.fullScreenBtnStyleY= displayMapOption.restoreFullScreenButtonStyle.position.y;
+						_params.fullScreenTitle= displayMapOption.restoreFullScreenButtonStyle.title;
 					}
 				}
 								
-				_params.conter = counter
-			var _paramsJson:String= JSON.stringify(_params)	
+				_params.conter = counter;
+			var _paramsJson:String= JSON.stringify(_params);	
 										
 			return _paramsJson;
 			
@@ -312,11 +312,11 @@ package map
 				if(_path.exists)
 				{			
 					_path.copyTo(_pathCopy, true);
-					return  _pathCopy.url
+					return  _pathCopy.url;
 				}
 			}
 			
-			return null
+			return null;
 		}
 	}
 }
