@@ -11,17 +11,15 @@
   <script type="text/javascript">
 var map;
 function setMap(params) {
-	document.getElementById("preCenter").style.visibility = "hidden";	
-	document.getElementById("preCenter").style.position = "absolute";
-	paramsObj = params
-	pointArray = paramsObj.location
+
 }
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 8,
-     disableDefaultUI: true
 
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 30, lng: 51},
+    zoom: 5,
+	mapTypeId:google.maps.MapTypeId.MAP,
+     disableDefaultUI: true
   });
 }
  </script>

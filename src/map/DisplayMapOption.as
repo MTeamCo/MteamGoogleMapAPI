@@ -78,7 +78,7 @@ package map
 		public var disableDefaultUI:Boolean = true
 		public var simpleButtonUrl:String;
 		
-		
+		public var searchBox:Boolean = false;
 		public function DisplayMapOption()
 		{
 		}

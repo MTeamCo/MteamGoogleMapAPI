@@ -1,6 +1,11 @@
 package map
 {
+	import file.Read_Write;
+	
 	import flash.filesystem.File;
+	import flash.utils.ByteArray;
+	
+	import mx.utils.Base64Encoder;
 
 	public class Marker
 	{
@@ -78,30 +83,25 @@ package map
 			_title = Title_p	
 			_id = Id_p
 			_useSetIconPath = UseSetIconPath_p	
-			_infowindow = Infowindow_p
-			if(UseSetIconPath_p)
+			_infowindow = Infowindow_p	
+			if(Icon_p!='' && Icon_p!=null && Icon_p.indexOf('data:')==-1)
 			{
-				if(Icon_p!='' && Icon_p!=null)
-				{	
-					var _path:File = File.applicationDirectory.resolvePath(Icon_p);
-					var _pathCopy : File = File.createTempFile();
-					if(_path.exists)
-					{			
-						_path.copyTo(_pathCopy, true);
-						_icon = _pathCopy.url
-					}
-					else
-					{
-						trace('<<---Marker icons path is not exists and use default Google Map icon--->>')
-						_icon = '';
-					}
-				}
+				var _pathIcon:File = File.applicationDirectory.resolvePath(Icon_p); 
+				var iconBytArray:ByteArray = FileManager.loadFile(_pathIcon);
+					iconBytArray.position = 0;
+				var b64:Base64Encoder = new Base64Encoder();
+				b64.encodeBytes(iconBytArray);
+				_icon = 'data: image/'+_pathIcon.extension+';base64,'+b64.toString();
+
+			}
+			else if(Icon_p.indexOf('data:')!=-1)
+			{
+				_icon = Icon_p;
 			}
 			else
 			{
-				_icon = Icon_p
+				_icon = '';
 			}
-
 		}
 	}
 }

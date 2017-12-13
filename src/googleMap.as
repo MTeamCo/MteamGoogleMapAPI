@@ -28,16 +28,16 @@ package
 			var markerList:Vector.<Marker>= new Vector.<Marker>()
 				
 			SwitchUrl	
-			markerList.push(new Marker(40,45,'0','M','new marker','icon.png'))
+			markerList.push(new Marker(40,45,'0','M','new marker','Data/icon.png'))
 			markerList.push(new Marker(35,50,'1','K',''))	
-				var markerPanTo2:AddMarker = new AddMarker(markerList)
+				var markerPanTo2:AddMarker = new AddMarker();
 				markerPanTo2.addEventListener(MapEvent.GET_MARKER_LIST,panto_fun)
 					
 					
 	
 					
 				var displayMap:DisplayMapOption = new DisplayMapOption()
-					displayMap.mapTypeId = DisplayMapOption.mapTypeId.SATELLITE
+					displayMap.mapTypeId = DisplayMapOption.mapTypeId.MAP
 					displayMap.fullscreen = DisplayMapOption.fullScreen.FULLSCREEN	
 					displayMap.area = new Rectangle(0,0,384,300)
 					displayMap.fullScreenArea = new Rectangle(0,0,768,1024)		
@@ -50,11 +50,12 @@ package
 					//displayMap.backToMarker = 2000	
 					displayMap.outLabel = true
 				//	displayMap.zoomOnSelectMarker = 8
-					displayMap.sendMarkerSelected = true	
+					displayMap.sendMarkerSelected = true
+					displayMap.location = markerList
+						
 					
 				markerPanTo2.setup(this,displayMap)	
 			//////////////////////////Sepehr debug
-			
 			
 					
 		}
