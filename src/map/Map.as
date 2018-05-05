@@ -2,16 +2,19 @@ package map
 {
 	import contents.TextFile;
 	
+	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.LocationChangeEvent;
 	import flash.filesystem.File;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 
 	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
@@ -145,6 +148,7 @@ package map
 			_stage = _movieMap.stage;
 			showMap();
 			_movieMap.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN,checkBack,false,100000);
 		}
 		
 		public function hideMap():void
@@ -162,6 +166,7 @@ package map
 		
 		public function visibleMap(Status_p:Boolean):void
 		{
+			if(_mapStage == null)return;
 			if(Status_p)
 			{
 				_mapStage.stage = _stage;
@@ -317,6 +322,21 @@ package map
 			}
 			
 			return null;
+		}
+		
+		private function checkBack(ev:KeyboardEvent):void
+		{
+
+			if(ev.keyCode == Keyboard.BACK || ev.keyCode == Keyboard.BACKSPACE || ev.keyCode == Keyboard.PAGE_UP )
+			{
+				if(!_isHide && displayMapOption.activeBackDevice)
+				{
+					ev.preventDefault();
+					ev.stopImmediatePropagation();
+					hideMap();
+				}
+
+			}
 		}
 	}
 }

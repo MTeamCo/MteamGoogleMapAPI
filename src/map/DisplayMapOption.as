@@ -79,6 +79,7 @@ package map
 		public var simpleButtonUrl:String;
 		
 		public var searchBox:Boolean = false;
+		public var activeBackDevice:Boolean;
 		public function DisplayMapOption()
 		{
 		}
