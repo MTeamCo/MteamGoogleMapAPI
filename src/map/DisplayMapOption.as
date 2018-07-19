@@ -1,10 +1,11 @@
 package map
 {
+	
 	import flash.geom.Rectangle;
 
 	public class DisplayMapOption
 	{
-		private static var __mapTypeId:MapTypeId
+		private static var __mapTypeId:MapTypeId;
 		public static function get mapTypeId():MapTypeId
 		{
 			if(__mapTypeId==null)
@@ -16,11 +17,11 @@ package map
 			
 
 		public  var mapTypeId:String = DisplayMapOption.mapTypeId.MAP
-
+		
 		//////////////////////////////////////////////////////////////
 		
 		
-		private static var __fullscreen:FullScreen
+		private static var __fullscreen:FullScreen;
 		public static function get fullScreen():FullScreen
 		{
 			if(__fullscreen==null)
@@ -31,6 +32,8 @@ package map
 		}
 		
 		
+		public static var latLngBounds:LatLngBounds;
+
 		
 		public var fullscreen:String= DisplayMapOption.fullScreen.RESTORE
 			
@@ -80,6 +83,15 @@ package map
 		
 		public var searchBox:Boolean = false;
 		public var activeBackDevice:Boolean;
+		
+		/**set image on map after set url must set latLngBoundsImage*/
+		public var imageUrl:String;
+		
+
+		/**lat1 and lng1 is sout west
+		 * lat2 and lng2 is north east*/
+		public var latLngBoundsImage:LatLngBounds;
+		
 		public function DisplayMapOption()
 		{
 		}

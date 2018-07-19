@@ -279,7 +279,8 @@ package map
 				_params.sendButton = displayMapOption.sendButton;
 				_params.fullScreen = _fullScreen;
 				_params.searchBox = displayMapOption.searchBox;	
-					
+				_params.imageUrl = displayMapOption.imageUrl;
+				_params.latLngBoundsImage = displayMapOption.latLngBoundsImage;
 				if(displayMapOption.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true;
