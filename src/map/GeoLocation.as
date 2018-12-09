@@ -1,5 +1,7 @@
 package map
 {
+	import contents.alert.Alert;
+	
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -11,11 +13,12 @@ package map
 	[Event(name="NOSUPPORTED",type="map.MapEvent")]
 	[Event(name="GEOLOCATION_UPDATE",type="map.MapEvent")]
 	[Event(name="GPS_NO_ACTIVE",type="map.MapEvent")]
-	public class GeoLocation extends EventDispatcher
+	public class GeoLocation extends MovieClip
 	{
 
-		private var _marker:Marker=null
-		private var _geo:Geolocation=null
+		private var _marker:Marker=null;
+		private var _geo:Geolocation=null;
+		private var _debugGPS:Boolean;
 		public function GeoLocation()
 		{
 		}
@@ -23,62 +26,59 @@ package map
 		public function get marker():Marker
 		{
 			
-			if(!Geolocation.isSupported)
+			if(!Geolocation.isSupported && !_debugGPS)
 			{
-				this.dispatchEvent(new MapEvent(MapEvent.NOSUPPORTED))
+				this.dispatchEvent(new MapEvent(MapEvent.NOSUPPORTED));
 			}
 			
 			if(Geolocation.isSupported && _marker==null)
 			{
-				this.dispatchEvent(new MapEvent(MapEvent.GPS_NO_ACTIVE))	
+				this.dispatchEvent(new MapEvent(MapEvent.GPS_NO_ACTIVE));
 			}
-			return _marker
+			return _marker;
 		}
 		public function setup(DebugGPS_p:Boolean=true):void
 		{		
-			getLocation(DebugGPS_p)		
+			getLocation(DebugGPS_p);	
 		}
 		private function getLocation(DebugGPS_p:Boolean):void
 		{	
-
+			_debugGPS = DebugGPS_p;
 			if(DebugGPS_p)
 			{
-				_marker = new Marker(35.7137559,51.4149215)
-				this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE))
-				return 	
+				_marker = new Marker(35.700726037213926,51.39178147280688);
+				this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE));
+				this.dispatchEvent(new MapEvent(MapEvent.MARKER_ISREADY));
+				return ;	
 			}
 			
-			if(!Geolocation.isSupported)
+			if(!Geolocation.isSupported && !DebugGPS_p)
 			{
-				this.dispatchEvent(new MapEvent(MapEvent.NOSUPPORTED))
-				return	
+				this.dispatchEvent(new MapEvent(MapEvent.NOSUPPORTED));
+				return	;
 			}
-			else
-			{
-				this.addEventListener(Event.ENTER_FRAME,chekMarkerReady)
-			}
-			
+			this.addEventListener(Event.ENTER_FRAME,chekMarkerReady);
 			if(_geo==null)
 			{
-				_geo = new Geolocation()
-				_geo.addEventListener(GeolocationEvent.UPDATE,update_fun)
+				_geo = new Geolocation();
+				_geo.addEventListener(GeolocationEvent.UPDATE,update_fun);
 			}
-			
 		}
 		
 		protected function chekMarkerReady(event:Event):void
 		{
-			// TODO Auto-generated method stub
-			if(marker!=null)
+			trace('try to find Geo Location...');
+			if(_marker!=null)
 			{
-				this.removeEventListener(Event.ENTER_FRAME,chekMarkerReady)
-				this.dispatchEvent(new MapEvent(MapEvent.MARKER_ISREADY))	
+				this.removeEventListener(Event.ENTER_FRAME,chekMarkerReady);
+				this.dispatchEvent(new MapEvent(MapEvent.MARKER_ISREADY));	
+				trace('Location is finded')
 			}
 		}
 		private function update_fun(event:GeolocationEvent):void
 		{
-			_marker = new Marker(event.latitude,event.longitude)
-			this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE))	
+			_marker = new Marker(event.latitude,event.longitude);
+			this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE));
 		}
 	}
 }

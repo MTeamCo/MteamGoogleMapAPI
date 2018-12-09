@@ -78,16 +78,8 @@ package map
 			}
 			
 			if(OnGPS_p)
-			{
-				if(DevicePrefrence.isItPC)
-				{
-					GPS.setup();
-				}
-				else
-				{
-					GPS.setup(false);
-				}
-				
+			{	
+				GPS.setup(DevicePrefrence.isItPC);
 			}
 			
 		}
