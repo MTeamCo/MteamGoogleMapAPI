@@ -11,6 +11,7 @@ package map
 							NOSUPPORTED:String = "NOSUPPORTED",
 							MARKER_ISREADY:String="MARKER_ISREADY",
 							GPS_NO_ACTIVE:String = "GPS_NO_ACTIVE";
+		
 
 		
 		private var _loadCompelet:Boolean;
