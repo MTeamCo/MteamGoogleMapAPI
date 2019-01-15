@@ -9,6 +9,7 @@ package map
 	import flash.utils.clearInterval;
 	import flash.utils.clearTimeout;
 	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
 
 	[Event(name="GET_SPEED",type="map.OdometerEvent")]
 	public class Odometer extends EventDispatcher
@@ -25,7 +26,7 @@ package map
 		public static var dispacher:Odometer;
 		private static var _speed:Number;	
 		
-		private static var setTimeOut:uint;
+		private static var setTimeOutId:uint;
 		private static var _speedTime:Number;
 		public static function get kilometer_hour():Number
 		{
@@ -64,8 +65,8 @@ package map
 			geo.addEventListener(GeolocationEvent.UPDATE,update);
 			if(DebugMode)
 			{
-				clearTimeout(setTimeOut);
-				setTimeOut = setTimeOut(debugEvent,1000);
+				clearTimeout(setTimeOutId);
+				setTimeOutId = setTimeout(debugEvent,1000);
 			}
 
 		}
@@ -73,13 +74,19 @@ package map
 		{
 			debuglat+=_speedTime;
 			debuglong+=_speedTime;
-			var debugSpeed:Number = CalculatDistance.CalculationByDistance(
-			geo.dispatchEvent(new GeolocationEvent(GeolocationEvent.UPDATE,false,false,));
-			clearTimeout(setTimeOut);
-			setTimeOut = setTimeOut(debugEvent,1000);
+			if(oldDebugLat > 0 && oldDebugLong > 0)
+			{
+				var debugSpeed:Number = CalculatDistance.CalculationByDistance(new Marker(oldDebugLat,oldDebugLong),new Marker(debuglat,debuglong));
+				geo.dispatchEvent(new GeolocationEvent(GeolocationEvent.UPDATE,false,false,debuglat,debuglong,0,0,0,debugSpeed*1000));
+			}
+			oldDebugLat = debuglat;
+			oldDebugLong = debuglong;
+			clearTimeout(setTimeOutId);
+			setTimeOutId = setTimeout(debugEvent,1000);
 		}
 		protected static function update(event:GeolocationEvent):void
 		{	
+			_speed = event.speed;
 			dispacher.dispatchEvent(new OdometerEvent(OdometerEvent.GET_SPEED,event.altitude,event.latitude,event.latitude,event.heading,event.speed,event.horizontalAccuracy,event.verticalAccuracy,event.timestamp,kilometer_hour,meter_secound,mile_hour,foot_secound));	
 		}
 
