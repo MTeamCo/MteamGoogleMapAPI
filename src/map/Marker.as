@@ -84,7 +84,7 @@ package map
 		private var _distance:Number;
 		public function set distance(value:Number):void
 		{
-			_distanc = value;
+			_distance = value;
 		}
 		public function get distance():Number
 		{
