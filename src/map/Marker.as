@@ -81,18 +81,18 @@ package map
 		{
 			_date = value;
 		}
-		private var _distanc:Number;
-		public function set distanc(value:Number):void
+		private var _distance:Number;
+		public function set distance(value:Number):void
 		{
 			_distanc = value;
 		}
-		public function get distanc():Number
+		public function get distance():Number
 		{
-			return _distanc;
+			return _distance;
 		}
 		
 		/**infowindow is html format*/
-		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='',Icon_p:String='',UseSetIconPath_p:Boolean=true,Infowindow_p:String=null,Distanc_p:Number=0,Date_p:Date=null)
+		public function Marker(Lat_p:Number,Lng_p:Number,Id_p:String='',Label_p:String='',Title_p:String='',Icon_p:String='',UseSetIconPath_p:Boolean=true,Infowindow_p:String=null,Distance_p:Number=0,Date_p:Date=null)
 		{
 			_lat = Lat_p
 			_lng = Lng_p
@@ -101,7 +101,7 @@ package map
 			_id = Id_p
 			_useSetIconPath = UseSetIconPath_p	
 			_infowindow = Infowindow_p	
-			_distanc = Distanc_p;	
+			_distance = Distance_p;	
 			_date = Date_p;	
 			if(Icon_p!='' && Icon_p!=null && Icon_p.indexOf('data:')==-1)
 			{
