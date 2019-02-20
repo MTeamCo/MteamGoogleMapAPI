@@ -87,7 +87,7 @@ package map
 		protected static function update(event:GeolocationEvent):void
 		{	
 			_speed = event.speed;
-			dispacher.dispatchEvent(new OdometerEvent(OdometerEvent.GET_SPEED,event.altitude,event.latitude,event.latitude,event.heading,event.speed,event.horizontalAccuracy,event.verticalAccuracy,event.timestamp,kilometer_hour,meter_secound,mile_hour,foot_secound));	
+			dispacher.dispatchEvent(new OdometerEvent(OdometerEvent.GET_SPEED,event.altitude,event.latitude,event.longitude,event.heading,event.speed,event.horizontalAccuracy,event.verticalAccuracy,event.timestamp,kilometer_hour,meter_secound,mile_hour,foot_secound));	
 		}
 
 		public static function convert(InputValue_p:Number,InputUnit_p:String,ExportUnit_p:String):Number
