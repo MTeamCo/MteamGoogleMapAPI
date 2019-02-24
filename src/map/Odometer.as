@@ -57,12 +57,14 @@ package map
 		}
 		
 		private static var geo:Geolocation;
-		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		/**
+		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
 		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true):void
 		{
 			_speedTime = SpeedTime;
 			dispacher = new Odometer();
 			geo = new Geolocation();
+			geo.addEventListener(GeolocationEvent.UPDATE, update);
 			geo.addEventListener(GeolocationEvent.UPDATE, update);
 			geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
 			if(DebugMode)

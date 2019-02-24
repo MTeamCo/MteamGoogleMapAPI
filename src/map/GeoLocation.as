@@ -39,7 +39,8 @@ package map
 			}
 			return _marker;
 		}
-		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		/**
+		* @param	pause	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
 		public function pausesLocationUpdatesAutomatically(pause:Boolean):void
 		{
 			if (_geo != null)
@@ -54,7 +55,8 @@ package map
 				_geo.desiredAccuracy = Accracy;
 			}
 		}
-		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		/**
+		* @param	pause	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
 		public function setup(DebugGPS_p:Boolean = true, pause:Boolean = true):void
 		{		
 			getLocation(DebugGPS_p);	

@@ -65,7 +65,8 @@ package map
 		public function Map()
 		{
 		}
-		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		/**
+		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
 		public static function setup(dataAddress_p:String = null, htmlName_p:String = null, OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true):void
 		{
 			if(dataAddress_p!=null)
