@@ -57,18 +57,35 @@ package map
 		}
 		
 		private static var geo:Geolocation;
-		public static function start(DebugMode:Boolean=false,SpeedTime:Number=0):void
+		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true):void
 		{
 			_speedTime = SpeedTime;
 			dispacher = new Odometer();
 			geo = new Geolocation();
-			geo.addEventListener(GeolocationEvent.UPDATE,update);
+			geo.addEventListener(GeolocationEvent.UPDATE, update);
+			geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
 			if(DebugMode)
 			{
 				clearTimeout(setTimeOutId);
 				setTimeOutId = setTimeout(debugEvent,1000);
 			}
 
+		}
+		
+		/**Geolocation.LOCATION_ACCURACY_BEST_FOR_NAVIGATION: for the highest possible accuracy that uses additional sensor data to facilitate navigation apps<br/>
+		 * Geolocation.LOCATION_ACCURACY_BEST: for the best level of accuracy available<br/>
+		 * Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS: for the accuracy of within ten meters of the desired target<br/>
+		 * Geolocation.LOCATION_ACCURACY_HUNDRED_METERS: for the accuracy of within one hundred meters of the desired target.<br/>
+		 * Geolocation.LOCATION_ACCURACY_KILOMETER: for accuracy to the nearest kilometer.<br/>
+		 * Geolocation.LOCATION_ACCURACY_THREE_KILOMETERS: for accuracy to the nearest three kilometers.
+*/
+		public static function set setAccuracy(Accracy:String):void
+		{
+			if (geo)
+			{
+				geo.desiredAccuracy = Accracy;
+			}
 		}
 		private static function debugEvent():void
 		{

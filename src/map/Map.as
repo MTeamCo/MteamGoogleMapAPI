@@ -65,8 +65,8 @@ package map
 		public function Map()
 		{
 		}
-		
-		public static function setup(dataAddress_p:String=null,htmlName_p:String=null,OnGPS_p:Boolean= false):void
+		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		public static function setup(dataAddress_p:String = null, htmlName_p:String = null, OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true):void
 		{
 			if(dataAddress_p!=null)
 			{
@@ -79,9 +79,23 @@ package map
 			
 			if(OnGPS_p)
 			{	
-				GPS.setup(DevicePrefrence.isItPC);
+				GPS.setup(DevicePrefrence.isItPC, pauseAutomatically);
 			}
 			
+		}
+		/**Geolocation.LOCATION_ACCURACY_BEST_FOR_NAVIGATION: for the highest possible accuracy that uses additional sensor data to facilitate navigation apps<br/>
+		 * Geolocation.LOCATION_ACCURACY_BEST: for the best level of accuracy available<br/>
+		 * Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS: for the accuracy of within ten meters of the desired target<br/>
+		 * Geolocation.LOCATION_ACCURACY_HUNDRED_METERS: for the accuracy of within one hundred meters of the desired target.<br/>
+		 * Geolocation.LOCATION_ACCURACY_KILOMETER: for accuracy to the nearest kilometer.<br/>
+		 * Geolocation.LOCATION_ACCURACY_THREE_KILOMETERS: for accuracy to the nearest three kilometers.
+*/
+		public static function set setAccuracy(Accracy:String):void
+		{
+			if (GPS)
+			{
+				GPS.setAccuracy = Accracy;
+			}
 		}
 		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapOption=null):void
 		{

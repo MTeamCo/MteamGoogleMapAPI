@@ -9,6 +9,7 @@ package map
 	import flash.sensors.Geolocation;
 	import flash.utils.setTimeout;
 
+
 	[Event(name="MARKER_ISREADY",type="map.MapEvent")]
 	[Event(name="NOSUPPORTED",type="map.MapEvent")]
 	[Event(name="GEOLOCATION_UPDATE",type="map.MapEvent")]
@@ -19,6 +20,7 @@ package map
 		private var _marker:Marker=null;
 		private var _geo:Geolocation=null;
 		private var _debugGPS:Boolean;
+		private var _pause:Boolean;
 		public function GeoLocation()
 		{
 		}
@@ -37,9 +39,26 @@ package map
 			}
 			return _marker;
 		}
-		public function setup(DebugGPS_p:Boolean=true):void
+		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		public function pausesLocationUpdatesAutomatically(pause:Boolean):void
+		{
+			if (_geo != null)
+			{
+				_geo.pausesLocationUpdatesAutomatically = pause;
+			}
+		}
+		public function setAccuracy(Accracy:String):void
+		{
+			if (_geo != null)
+			{
+				_geo.desiredAccuracy = Accracy;
+			}
+		}
+		/**pausesLocationUpdatesAutomatically:for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		public function setup(DebugGPS_p:Boolean = true, pause:Boolean = true):void
 		{		
 			getLocation(DebugGPS_p);	
+			_pause = pause;
 		}
 		private function getLocation(DebugGPS_p:Boolean):void
 		{	
@@ -61,7 +80,8 @@ package map
 			if(_geo==null)
 			{
 				_geo = new Geolocation();
-				_geo.addEventListener(GeolocationEvent.UPDATE,update_fun);
+				_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
+				_geo.pausesLocationUpdatesAutomatically = _pause;
 			}
 		}
 		
