@@ -1,4 +1,4 @@
-package map
+﻿package map
 {
 	import contents.alert.Alert;
 	
@@ -61,7 +61,7 @@ package map
 		public function setup(DebugGPS_p:Boolean = true, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{		
 			getLocation(DebugGPS_p);	
-			_pause = pause;
+			_pause = pauseAutomatically;
 			_accracy = accuracy;
 		}
 		private function getLocation(DebugGPS_p:Boolean):void
