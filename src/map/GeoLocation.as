@@ -46,19 +46,19 @@ package map
 		{
 			if (_geo != null)
 			{
-				_geo.pausesLocationUpdatesAutomatically = pause;
+				(_geo as Object).pausesLocationUpdatesAutomatically = pause;
 			}
 		}
 		public function setAccuracy(Accracy:String):void
 		{
 			if (_geo != null)
 			{
-				_geo.desiredAccuracy = Accracy;
+				(_geo as Object).desiredAccuracy = Accracy;
 			}
 		}
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public function setup(DebugGPS_p:Boolean = true, pauseAutomatically:Boolean = true,accuracy:String = Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
+		public function setup(DebugGPS_p:Boolean = true, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{		
 			getLocation(DebugGPS_p);	
 			_pause = pause;

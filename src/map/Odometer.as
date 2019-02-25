@@ -15,6 +15,8 @@ package map
 	[Event(name="GET_SPEED",type="map.OdometerEvent")]
 	public class Odometer extends EventDispatcher
 	{
+		
+		
 		public static const METER_SECOND:String = "meter/second";
 		public static const FOOT_SECOND:String = "foot/second";
 		public static const KILOMETER_HOUR:String = "kilometer/hour";
@@ -63,7 +65,7 @@ package map
 		private static var geo:Geolocation;
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true,accuracy:String = Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
+		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_NOT_DEFINE):void
 		{
 			_speedTime = SpeedTime;
 			_accracy = accuracy;

@@ -1,6 +1,7 @@
 package map
 {
 	import contents.TextFile;
+	import flash.sensors.Geolocation;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
@@ -67,7 +68,7 @@ package map
 		}
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public static function setup(dataAddress_p:String = null, htmlName_p:String = null, OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true):void
+		public static function setup(dataAddress_p:String = null, htmlName_p:String = null, OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{
 			if(dataAddress_p!=null)
 			{
@@ -80,7 +81,7 @@ package map
 			
 			if(OnGPS_p)
 			{	
-				GPS.setup(DevicePrefrence.isItPC, pauseAutomatically);
+				GPS.setup(DevicePrefrence.isItPC, pauseAutomatically,accuracy);
 			}
 			
 		}
@@ -95,7 +96,7 @@ package map
 		{
 			if (GPS)
 			{
-				GPS.setAccuracy = Accracy;
+				(GPS as Object).setAccuracy = Accracy;
 			}
 		}
 		public function setup(Target_p:MovieClip,DisplayMapWindow_p:DisplayMapOption=null):void
