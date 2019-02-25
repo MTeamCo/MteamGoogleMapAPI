@@ -1,6 +1,7 @@
 package map
 {
 	import contents.alert.Alert;
+	import flash.permissions.PermissionStatus;
 	
 	import flash.events.EventDispatcher;
 	import flash.events.GeolocationEvent;
@@ -25,9 +26,12 @@ package map
 		private static var oldDebugLong:Number;
 		public static var dispacher:Odometer;
 		private static var _speed:Number;	
+		private static var _accracy:String;
+		private static var _pause:Boolean;
 		
 		private static var setTimeOutId:uint;
 		private static var _speedTime:Number;
+		private static var intervalId:int;
 		public static function get kilometer_hour():Number
 		{
 			return convert(_speed,METER_SECOND,KILOMETER_HOUR);
@@ -59,20 +63,32 @@ package map
 		private static var geo:Geolocation;
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true):void
+		public static function start(DebugMode:Boolean = false, SpeedTime:Number = 0, pauseAutomatically:Boolean = true,accuracy:String = Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{
 			_speedTime = SpeedTime;
+			_accracy = accuracy;
+			_pause = pauseAutomatically;
 			dispacher = new Odometer();
 			geo = new Geolocation();
 			geo.addEventListener(GeolocationEvent.UPDATE, update);
-			geo.addEventListener(GeolocationEvent.UPDATE, update);
-			geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
+			intervalId = setInterval(checkGPS, 1000);
 			if(DebugMode)
 			{
+				geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
 				clearTimeout(setTimeOutId);
 				setTimeOutId = setTimeout(debugEvent,1000);
 			}
 
+		}
+		
+		static private function checkGPS():void 
+		{
+			if (Geolocation.permissionStatus == PermissionStatus.GRANTED)
+			{
+				(geo as Object).pausesLocationUpdatesAutomatically = _pause;
+				(geo as Object).desiredAccuracy = _accracy;
+				clearInterval(intervalId);
+			}
 		}
 		
 		/**Geolocation.LOCATION_ACCURACY_BEST_FOR_NAVIGATION: for the highest possible accuracy that uses additional sensor data to facilitate navigation apps<br/>
@@ -86,7 +102,7 @@ package map
 		{
 			if (geo)
 			{
-				geo.desiredAccuracy = Accracy;
+				(geo as Object).desiredAccuracy = Accracy;
 			}
 		}
 		private static function debugEvent():void

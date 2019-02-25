@@ -21,6 +21,7 @@ package map
 		private var _geo:Geolocation=null;
 		private var _debugGPS:Boolean;
 		private var _pause:Boolean;
+		private var _accracy:String;
 		public function GeoLocation()
 		{
 		}
@@ -56,11 +57,12 @@ package map
 			}
 		}
 		/**
-		* @param	pause	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public function setup(DebugGPS_p:Boolean = true, pause:Boolean = true):void
+		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
+		public function setup(DebugGPS_p:Boolean = true, pauseAutomatically:Boolean = true,accuracy:String = Geolocation.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{		
 			getLocation(DebugGPS_p);	
 			_pause = pause;
+			_accracy = accuracy;
 		}
 		private function getLocation(DebugGPS_p:Boolean):void
 		{	
@@ -83,7 +85,8 @@ package map
 			{
 				_geo = new Geolocation();
 				_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
-				_geo.pausesLocationUpdatesAutomatically = _pause;
+				(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
+				(_geo as Object).desiredAccuracy = _accracy;
 			}
 		}
 		
