@@ -1,7 +1,10 @@
 package map
 {
 	import contents.alert.Alert;
+	import flash.display.MovieClip;
+	import flash.events.PermissionEvent;
 	import flash.permissions.PermissionStatus;
+	import nativeClasses.localNotification.LocalNotificationJK;
 	
 	import flash.events.EventDispatcher;
 	import flash.events.GeolocationEvent;
