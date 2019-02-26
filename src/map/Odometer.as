@@ -13,7 +13,7 @@ package map
 	import flash.utils.setTimeout;
 
 	[Event(name="GET_SPEED",type="map.OdometerEvent")]
-	public class Odometer extends EventDispatcher
+	public class Odometer extends MovieClip
 	{
 		
 		
@@ -34,6 +34,10 @@ package map
 		private static var setTimeOutId:uint;
 		private static var _speedTime:Number;
 		private static var intervalId:int;
+		private static var intervalIdMute:int = 0;
+		
+		private static var lastMuteStatus:* = null ;
+		
 		public static function get kilometer_hour():Number
 		{
 			return convert(_speed,METER_SECOND,KILOMETER_HOUR);
@@ -107,6 +111,7 @@ package map
 			geo = new Geolocation();
 			geo.addEventListener(GeolocationEvent.UPDATE, update);
 			intervalId = setInterval(checkGPS, 1000);
+			intervalIdMute = setInterval(checkMute, 10000);
 			if(DebugMode)
 			{
 				geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
@@ -114,6 +119,24 @@ package map
 				setTimeOutId = setTimeout(debugEvent,1000);
 			}
 
+		}
+		
+		static private function checkMute():void 
+		{
+			trace(" geo.muted : " + geo.muted);
+			if (lastMuteStatus != geo.muted)
+			{
+				if (geo.muted == true)
+				{
+						LocalNotificationJK.sendNotification("ارتباط شما با جی پی اس گوشی قطع می باشد")
+						//LocalNotificationJK.sendNotification("gps disconnect")
+				}
+				else
+				{
+					LocalNotificationJK.cancelCustomNotification();
+				}
+				lastMuteStatus = geo.muted ;
+			}
 		}
 		
 		static private function checkGPS():void 
@@ -155,9 +178,12 @@ package map
 			setTimeOutId = setTimeout(debugEvent,1000);
 		}
 		protected static function update(event:GeolocationEvent):void
-		{	
-			_speed = event.speed;
-			dispacher.dispatchEvent(new OdometerEvent(OdometerEvent.GET_SPEED,event.altitude,event.latitude,event.longitude,event.heading,event.speed,event.horizontalAccuracy,event.verticalAccuracy,event.timestamp,kilometer_hour,meter_secound,mile_hour,foot_secound));	
+		{
+			if (!isNaN(event.speed))
+			{
+				_speed = event.speed;
+				dispacher.dispatchEvent(new OdometerEvent(OdometerEvent.GET_SPEED, event.altitude, event.latitude, event.longitude, event.heading, event.speed, event.horizontalAccuracy, event.verticalAccuracy, event.timestamp, kilometer_hour, meter_secound, mile_hour, foot_secound));	
+			}
 		}
 
 		public static function convert(InputValue_p:Number,InputUnit_p:String,ExportUnit_p:String):Number
