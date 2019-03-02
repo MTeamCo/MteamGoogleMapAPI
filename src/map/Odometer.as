@@ -4,8 +4,6 @@
 	import flash.display.MovieClip;
 	import flash.events.PermissionEvent;
 	import flash.permissions.PermissionStatus;
-	import nativeClasses.localNotification.LocalNotificationJK;
-	import src.ui.pages.home.GPSIcon;
 	
 	import flash.events.EventDispatcher;
 	import flash.events.GeolocationEvent;
