@@ -85,8 +85,17 @@
 			{
 				_geo = new Geolocation();
 				_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
-				(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
-				(_geo as Object).desiredAccuracy = _accracy;
+				if((_geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically")
+				&&
+				(_geo as Object).hasOwnProperty("desiredAccuracy"))
+				{
+					(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
+					(_geo as Object).desiredAccuracy = _accracy;
+				}
+				else
+				{
+					trace("!!!!!!! Air32+ > pausesLocationUpdatesAutomatically");
+				}
 			}
 		}
 		
