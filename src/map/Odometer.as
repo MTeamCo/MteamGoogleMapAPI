@@ -110,7 +110,11 @@
 			intervalId = setInterval(checkGPS, 1000);
 			if (DebugMode)
 			{
-				geo.pausesLocationUpdatesAutomatically = pauseAutomatically;
+				if((geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically"))
+				{
+					(geo as Object).pausesLocationUpdatesAutomatically = pauseAutomatically;
+				}
+				
 				clearTimeout(setTimeOutId);
 				setTimeOutId = setTimeout(debugEvent, 1000);
 			}
@@ -134,8 +138,11 @@
 		{
 			if (Geolocation.permissionStatus == PermissionStatus.GRANTED)
 			{
-				(geo as Object).pausesLocationUpdatesAutomatically = _pause;
-				(geo as Object).desiredAccuracy = _accracy;
+				if((geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically") && (geo as Object).hasOwnProperty("desiredAccuracy"))
+				{
+					(geo as Object).pausesLocationUpdatesAutomatically = _pause;
+					(geo as Object).desiredAccuracy = _accracy;
+				}
 				clearInterval(intervalId);
 			}
 		}
