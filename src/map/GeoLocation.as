@@ -1,5 +1,7 @@
 ﻿package map
 {
+	import com.mteamapp.gps.MyLocation;
+	
 	import contents.alert.Alert;
 	
 	import flash.display.MovieClip;
@@ -84,17 +86,21 @@
 			if(_geo==null)
 			{
 				_geo = new Geolocation();
-				_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
-				if((_geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically")
-				&&
-				(_geo as Object).hasOwnProperty("desiredAccuracy"))
+				MyLocation.getGPSPermission(permissionGranted);
+				function permissionGranted():void
 				{
-					(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
-					(_geo as Object).desiredAccuracy = _accracy;
-				}
-				else
-				{
-					trace("!!!!!!! Air32+ > pausesLocationUpdatesAutomatically");
+					_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
+					if((_geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically")
+					&&
+					(_geo as Object).hasOwnProperty("desiredAccuracy"))
+					{
+						(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
+						(_geo as Object).desiredAccuracy = _accracy;
+					}
+					else
+					{
+						trace("!!!!!!! Air32+ > pausesLocationUpdatesAutomatically");
+					}
 				}
 			}
 		}
