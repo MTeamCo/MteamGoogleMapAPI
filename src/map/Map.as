@@ -107,7 +107,7 @@ package map
 			{
 				_fullScreen = true;
 			}
-			setFullScreen();;
+			setFullScreen();
 			_movieMap = new MovieClip();
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
@@ -189,7 +189,7 @@ package map
 		{
 			_isHide = false;
 			// TODO Auto Generated method stub	
-			_mapStage = new StageWebView(false);
+			_mapStage = new StageWebView(true);
 				
 			_mapStage.viewPort = displayMapOption.viewPort;
 				
