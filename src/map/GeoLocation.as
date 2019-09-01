@@ -107,7 +107,7 @@
 		
 		protected function chekMarkerReady(event:Event):void
 		{
-			trace('try to find Geo Location...');
+			//trace('try to find Geo Location...');
 			if(_marker!=null)
 			{
 				this.removeEventListener(Event.ENTER_FRAME,chekMarkerReady);
