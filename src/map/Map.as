@@ -238,7 +238,7 @@ package map
 		
 		protected function change_fun(event:LocationChangeEvent):void
 		{
-			trace('change')
+			//trace('change')
 			// TODO Auto-generated method stub
 			//trace('location change true:',event.location)
 		}
@@ -289,6 +289,7 @@ package map
 				_params.searchBox = displayMapOption.searchBox;	
 				_params.imageUrl = displayMapOption.imageUrl;
 				_params.latLngBoundsImage = displayMapOption.latLngBoundsImage;
+				_params.clustering = displayMapOption.clustering;
 				if(displayMapOption.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true;

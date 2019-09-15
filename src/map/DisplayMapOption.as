@@ -92,6 +92,8 @@ package map
 		 * lat2 and lng2 is north east*/
 		public var latLngBoundsImage:LatLngBounds;
 		
+		public var clustering:Boolean = false;
+		
 		public function DisplayMapOption()
 		{
 		}
