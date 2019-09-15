@@ -293,11 +293,39 @@ function initAutocomplete()
 		
 			var markersClusterer = paramsObj.location.map(function(location, i) {
 			label(paramsObj.location[i])
-				return new google.maps.Marker({
+				var newClustererMarker =  new google.maps.Marker({
 					position: location,
+					title: paramsObj.location[i].title,
+					icon: paramsObj.location[i].icon,
 					label: addLable
 			});
+			
+				var infowindow = new google.maps.InfoWindow({
+					content: paramsObj.location[i].infowindow
+				});
+				
+				
+				newClustererMarker.addListener('click', function()
+				{	
+					if(paramsObj.zoomOnSelectMarker>-1)
+					{
+						map.setZoom(paramsObj.zoomOnSelectMarker);
+						map.setCenter(newClustererMarker.getPosition());
+					}	
+						if(paramsObj.sendMarkerSelected)
+					{
+						sendMarkerListByeSeletor(paramsObj.location[i])
+					}
+						if(paramsObj.location[i].infowindow!=null)
+					{
+						infowindow.open(map, newClustererMarker);
+					}
+				});
+				
+				return newClustererMarker;
         });
+		
+	
 		
 		     // Add a marker clusterer to manage the markers.
 			var markerCluster = new MarkerClusterer(map, markersClusterer,
