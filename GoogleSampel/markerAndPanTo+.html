@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi"/-->
+	<meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=medium-dpi"/>
+    <style type="text/css">
+      html, body { 
+	    overflow: hidden;
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0; 
+		}
+      #map {
+		height: 100%; 
+	  }
+
+	  #preCenter{
+		 position: relative;
+		width:200px;
+		height:20px;
+		top:50%;
+		margin: auto;
+		
+	
+			
+	  }
+	  #preloader{
+		
+		border-style:solid;
+		border-radius:3px;
+		border-color: #666666;
+		border-width:2px;
+		background-color:#ECECEC
+		
+		
+		
+	  }
+	  #preladerText{
+
+		color: #333333;
+		text-align:center;
+		vertical-align: text-top;
+	  }
+	  	#pac-input {
+		visibility: hidden;
+		  position: absolute;
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 18px;
+        font-weight: 200;
+        margin-left: 0px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width:150px;
+		height:25px;
+		text-align:right;
+		vertical-align: text-top;
+		 z-index: 100;
+      }
+	 
+		#pac-input:focus {
+        border-color: #4d90fe;
+      }
+	
+
+ 
+    </style>
+	<script src="https://maps.googleapis.com/maps/api/js?key=yourkey&callback=initMap&language=fa&libraries=places&callback=initAutocomplete"></script>
+
+  </head>
+
+  <body>
+   <input id="pac-input" class="controls" type="text" placeholder="جستجو">
+ <div id="preCenter"> 
+	<div id="preloader">
+		  <p id="preladerText">...درحال بارگذاری</p>
+	</div>
+</div>
+   <div id="map"></div>
+   <table class="fullScreenId">
+  <tr>
+    <td <a onclick="fullScreenFun()" id="fullScreenText">&nbsp;</a></td>
+  </tr>
+</table>	
+	
+<table class="send">
+  <tr>
+    <td <a onclick="sendMarkerList()" id="sendText">&nbsp;</a></td>
+  </tr>
+</table>
+<script type="text/javascript">
+var map
+var markers = [];
+var pointArray = [];
+var intM=false
+var paramsObj = "MY_PARAM_TO_SPLIT_AND_REPLACE";
+try
+{
+	if(paramsObj.indexOf("MY")==0)
+	{
+		paramsObj = undefined ;
+	}
+}catch(e){}
+var fullScreen=false
+
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var labelIndex = 0;
+var addLable
+function setMarker(Marker_p)
+{
+	if(!paramsObj.showAllMarker)
+	{
+		setMapOnAll(null);
+		markers = [];
+	}
+	
+	var marker = new google.maps.Marker({
+	map: map,
+    position: Marker_p,
+	label: addLable,
+	title: Marker_p.title,
+	icon: Marker_p.icon
+  });
+  markers.push(marker);
+  
+  if(paramsObj.backToMarker>-1)
+  {
+	map.addListener('center_changed', function() {
+		// 3 seconds after the center of the map has changed, pan back to the
+		// marker.
+	window.setTimeout(function() {
+		 map.panTo(marker.getPosition());
+		}, paramsObj.backToMarker);
+	});
+  }
+
+
+  var infowindow = new google.maps.InfoWindow({
+    content: Marker_p.infowindow
+  });
+
+	marker.addListener('click', function()
+	{	
+	  if(paramsObj.zoomOnSelectMarker>-1)
+		{
+			map.setZoom(paramsObj.zoomOnSelectMarker);
+			map.setCenter(marker.getPosition());
+		}	
+		if(paramsObj.sendMarkerSelected)
+		{
+			sendMarkerListByeSeletor(Marker_p)
+		}
+		if(Marker_p.infowindow!=null)
+		{
+			 infowindow.open(map, marker);
+		}
+	});	
+}
+
+
+function label(loaction)
+{
+	if(paramsObj.outLabel)
+	{
+		addLable = labels[labelIndex++ % labels.length]
+	}
+	else
+	{
+		addLable = loaction.label
+	}
+}
+/*function setMap(params) {
+	document.getElementById("preCenter").style.visibility = "hidden";	
+	document.getElementById("preCenter").style.position = "absolute";
+	paramsObj = params
+	pointArray = paramsObj.location
+}*/
+
+var overlay;
+      USGSOverlay.prototype = new google.maps.OverlayView();
+function initAutocomplete()
+{
+	document.getElementById("preCenter").style.visibility = "hidden";	
+	document.getElementById("preCenter").style.position = "absolute";
+
+	pointArray = paramsObj.location
+
+	var sarchBox = document.getElementsByClassName("controls");
+		if(paramsObj.searchBox)
+		{
+			sarchBox[0].style.visibility ="visible";
+		}
+		
+	
+	if(paramsObj.sendButton)
+	{
+	var sendButton = document.getElementsByClassName("send")
+    var t = document.createTextNode(paramsObj.sendBtnTitle);
+	
+	document.getElementById("sendText").appendChild(t);
+	
+	sendButton[0].style.backgroundColor ="#ffffff";
+	sendButton[0].style.borderRadius  = "3px";
+	
+	sendButton[0].style.borderStyle="solid";
+	sendButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	sendButton[0].style.borderTopStyle="none"
+	sendButton[0].style.borderLeftStyle="none"
+	sendButton[0].style.borderWidth="2px";
+
+
+	sendButton[0].style.fontSize = "small";
+	sendButton[0].style.font = "arial";
+	document.getElementById("sendText").style.color = "#333333"
+	sendButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	sendButton[0].style.top = paramsObj.sendBtnY+"px";
+	sendButton[0].style.left = paramsObj.sendBtnX+"px";
+	sendButton[0].style.width = paramsObj.sendBtnWidth+"px"
+	sendButton[0].style.height = paramsObj.sendBtnHeight+"px"
+		
+	sendButton[0].style.verticalAlign="center";
+	sendButton[0].style.textAlign = "center";
+	sendButton[0].style.position = "absolute";
+	
+
+	
+	}
+	   
+
+	if(paramsObj.fullScreenStatus)
+	{	
+	var fullScreenButton = document.getElementsByClassName("fullScreenId")
+    var fullScreenText = document.createTextNode(paramsObj.fullScreenTitle);
+	
+	document.getElementById("fullScreenText").appendChild(fullScreenText);
+	
+	fullScreenButton[0].style.backgroundColor ="#ffffff";
+	fullScreenButton[0].style.borderRadius  = "3px";
+	
+	fullScreenButton[0].style.borderStyle="solid";
+	fullScreenButton[0].style.borderColor="rgba(0,0,0,0.3)";
+	fullScreenButton[0].style.borderTopStyle="none"
+	fullScreenButton[0].style.borderLeftStyle="none"
+	fullScreenButton[0].style.borderWidth="2px";
+
+
+	fullScreenButton[0].style.fontSize = "small";
+	fullScreenButton[0].style.font = "arial";
+	document.getElementById("fullScreenText").style.color = "#333333"
+	fullScreenButton[0].style.fontFamily = "Impact,Charcoal,sans-serif";		    
+  
+	fullScreenButton[0].style.top = paramsObj.fullScreenBtnStyleY+"px";
+	fullScreenButton[0].style.left = paramsObj.fullScreenBtnStyleX+"px";
+	fullScreenButton[0].style.width = paramsObj.fullScreenBtnStyleWidth+"px"
+	fullScreenButton[0].style.height = paramsObj.fullScreenBtnStyleHeight+"px"
+		
+	fullScreenButton[0].style.verticalAlign="center";
+	fullScreenButton[0].style.textAlign = "center";
+	fullScreenButton[0].style.position = "absolute";
+	
+	}
+	
+	var mapTypeId
+	if(paramsObj.mapTypeId == "SATELLITE")
+	{
+		mapTypeId = google.maps.MapTypeId.SATELLITE
+	}
+	if(paramsObj.mapTypeId=="MAP")
+	{
+		mapTypeId = google.maps.MapTypeId.MAP
+	}
+	if(paramsObj.location.length>0)
+	{
+		//alert(paramsObj.location.length)
+		var myLatLng = paramsObj.location[paramsObj.location.length-1]//{lat: paramsObj.lat, lng: paramsObj.lng};
+		
+		
+	  // Create a map object and specify the DOM element for display.
+		map = new google.maps.Map(document.getElementById('map'), {
+		center: myLatLng,scrollwheel:paramsObj.scrollwheel,zoom:paramsObj.zoom,mapTypeId:mapTypeId,disableDefaultUI: paramsObj.disableDefaultUI});
+		/*var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(35.71900,51.37748),
+            new google.maps.LatLng(35.7238,51.3869));*/
+		var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(paramsObj.latLngBoundsImage.lat1,paramsObj.latLngBoundsImage.lng1),
+            new google.maps.LatLng(paramsObj.latLngBoundsImage.lat2,paramsObj.latLngBoundsImage.lng2));
+			
+			
+
+        // The photograph is courtesy of the U.S. Geological Survey.
+      /*  var srcImage = 'https://developers.google.com/maps/documentation/' +
+            'javascript/examples/full/images/talkeetna.png';*/
+			
+		var srcImage = paramsObj.imageUrl;
+		//var srcImage = 'Data\icon.png';
+        // The custom USGSOverlay object contains the USGS image,
+        // the bounds of the image, and a reference to the map.
+        overlay = new USGSOverlay(bounds, srcImage, map);
+		
+	}
+	
+
+		
+	if(paramsObj.marker)
+	 {
+		
+		for (i=0;i<paramsObj.location.length;i++) 
+		{
+			
+			label(paramsObj.location[i])
+			setMarker(paramsObj.location[i])
+			
+			
+		}
+	 }
+	
+	map.addListener('click', function(e) 
+	{
+		placeMarkerAndPanTo(e.latLng);	
+	});  
+	
+	////////////////////////////////////////////
+	  // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+			
+			if (place.geometry.location) {   
+				placeSearchMarker(place.geometry.location)
+            } else {
+			var newMarkerSearch = {lat:place.geometry.viewport.south, lng:place.geometry.viewport.west,label:addLable,title:'',id:'',icon:''}	
+              bounds.extend(newMarkerSearch);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+		///////////////////////
+ 
+	
+	
+	
+	
+
+	
+	
+
+}
+//*****
+  /** @constructor */
+      function USGSOverlay(bounds, image, map) {
+
+        // Initialize all properties.
+        this.bounds_ = bounds;
+        this.image_ = image;
+        this.map_ = map;
+
+        // Define a property to hold the image's div. We'll
+        // actually create this div upon receipt of the onAdd()
+        // method so we'll leave it null for now.
+        this.div_ = null;
+
+        // Explicitly call setMap on this overlay.
+        this.setMap(map);
+      }
+
+      /**
+       * onAdd is called when the map's panes are ready and the overlay has been
+       * added to the map.
+       */
+      USGSOverlay.prototype.onAdd = function() {
+
+        var div = document.createElement('div');
+        div.style.borderStyle = 'none';
+        div.style.borderWidth = '0px';
+        div.style.position = 'absolute';
+
+        // Create the img element and attach it to the div.
+        var img = document.createElement('img');
+        img.src = this.image_;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.position = 'absolute';
+        div.appendChild(img);
+
+        this.div_ = div;
+
+        // Add the element to the "overlayLayer" pane.
+        var panes = this.getPanes();
+        panes.overlayLayer.appendChild(div);
+      };
+
+      USGSOverlay.prototype.draw = function() {
+
+        // We use the south-west and north-east
+        // coordinates of the overlay to peg it to the correct position and size.
+        // To do this, we need to retrieve the projection from the overlay.
+        var overlayProjection = this.getProjection();
+
+        // Retrieve the south-west and north-east coordinates of this overlay
+        // in LatLngs and convert them to pixel coordinates.
+        // We'll use these coordinates to resize the div.
+        var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
+        var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
+
+        // Resize the image's div to fit the indicated dimensions.
+        var div = this.div_;
+        div.style.left = sw.x + 'px';
+        div.style.top = ne.y + 'px';
+        div.style.width = (ne.x - sw.x) + 'px';
+        div.style.height = (sw.y - ne.y) + 'px';
+      };
+
+      // The onRemove() method will be called automatically from the API if
+      // we ever set the overlay's map property to 'null'.
+      USGSOverlay.prototype.onRemove = function() {
+        this.div_.parentNode.removeChild(this.div_);
+        this.div_ = null;
+      };
+
+	  
+	  //this command or must use async defer in <script src= for run map
+      google.maps.event.addDomListener(window, 'load', initAutocomplete);
+//******
+function placeSearchMarker(loaction)
+{
+	label(loaction)
+
+	var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
+	pointArray.push(newMarker)
+	var sendButton = document.getElementsByClassName("send")
+	sendButton[0].style.backgroundColor ="#F60B31";
+	document.getElementById("sendText").style.color = "#ffffff"
+
+}
+function placeMarkerAndPanTo(loaction) 
+{
+	label(loaction)
+	if(paramsObj.markerAndPanTo)
+	{
+		var newMarker = {lat:loaction.lat(), lng:loaction.lng(),label:addLable,title:'',id:'',icon:''}
+		pointArray.push(newMarker)
+		setMarker(newMarker)
+		var sendButton = document.getElementsByClassName("send")
+		sendButton[0].style.backgroundColor ="#F60B31";
+		document.getElementById("sendText").style.color = "#ffffff"
+	}
+	
+	
+  if(paramsObj.panTo)
+  {
+	 map.panTo(loaction);
+  }
+  
+}
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+
+// get change url
+/*window.onhashchange = function() {
+    var newHash = window.location.hash.substring(1);
+	newHash = newHash.split("%22").join("\"")
+	var params = JSON.parse(newHash);
+	 setMap(params)	
+};*/
+
+
+
+function fullScreenFun()
+{
+	paramsObj.fullScreen = !paramsObj.fullScreen
+	sendMarkerList()
+}
+// send new change url
+function sendMarkerListByeSeletor(MarkerSelected_p)
+{
+	var locObj = {loaction:pointArray,seledted:MarkerSelected_p,fullScreen:paramsObj.fullScreen}
+	var loactionStr = JSON.stringify(locObj)
+	window.location = "unknown:/"+loactionStr ;
+
+	  
+}
+
+function sendMarkerList()
+{
+	var locObj = {loaction:pointArray,seledted:null,fullScreen:paramsObj.fullScreen}
+	var loactionStr = JSON.stringify(locObj)
+	window.location = "unknown:/"+loactionStr ;
+
+	
+}
+ </script>
+  </body>
+</html>
