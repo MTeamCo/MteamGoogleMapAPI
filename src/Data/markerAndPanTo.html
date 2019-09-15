@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi"/-->
 	<meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=medium-dpi"/>
@@ -68,8 +67,8 @@
 
  
     </style>
-	<script src="https://maps.googleapis.com/maps/api/js?key=yourkey&callback=initMap&language=fa&libraries=places&callback=initAutocomplete"></script>
-
+	<!--img src="preloaders/Internet.gif" alt="Mountain View" style="width:64px;height:64px;position:absolute"-->
+		
   </head>
 
   <body>
@@ -91,7 +90,7 @@
     <td <a onclick="sendMarkerList()" id="sendText">&nbsp;</a></td>
   </tr>
 </table>
-<script type="text/javascript">
+ <script type="text/javascript">
 var map
 var markers = [];
 var pointArray = [];
@@ -179,8 +178,6 @@ function label(loaction)
 	pointArray = paramsObj.location
 }*/
 
-var overlay;
-      USGSOverlay.prototype = new google.maps.OverlayView();
 function initAutocomplete()
 {
 	document.getElementById("preCenter").style.visibility = "hidden";	
@@ -282,24 +279,8 @@ function initAutocomplete()
 	  // Create a map object and specify the DOM element for display.
 		map = new google.maps.Map(document.getElementById('map'), {
 		center: myLatLng,scrollwheel:paramsObj.scrollwheel,zoom:paramsObj.zoom,mapTypeId:mapTypeId,disableDefaultUI: paramsObj.disableDefaultUI});
-		/*var bounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(35.71900,51.37748),
-            new google.maps.LatLng(35.7238,51.3869));*/
-		var bounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(paramsObj.latLngBoundsImage.lat1,paramsObj.latLngBoundsImage.lng1),
-            new google.maps.LatLng(paramsObj.latLngBoundsImage.lat2,paramsObj.latLngBoundsImage.lng2));
-			
-			
+		
 
-        // The photograph is courtesy of the U.S. Geological Survey.
-      /*  var srcImage = 'https://developers.google.com/maps/documentation/' +
-            'javascript/examples/full/images/talkeetna.png';*/
-			
-		var srcImage = paramsObj.imageUrl;
-		//var srcImage = 'Data\icon.png';
-        // The custom USGSOverlay object contains the USGS image,
-        // the bounds of the image, and a reference to the map.
-        overlay = new USGSOverlay(bounds, srcImage, map);
 		
 	}
 	
@@ -307,16 +288,36 @@ function initAutocomplete()
 		
 	if(paramsObj.marker)
 	 {
-		
-		for (i=0;i<paramsObj.location.length;i++) 
+		if(paramsObj.clustering)
 		{
-			
+		
+			var markersClusterer = paramsObj.location.map(function(location, i) {
 			label(paramsObj.location[i])
-			setMarker(paramsObj.location[i])
-			
-			
+				return new google.maps.Marker({
+					position: location,
+					label: addLable
+			});
+        });
+		
+		     // Add a marker clusterer to manage the markers.
+			var markerCluster = new MarkerClusterer(map, markersClusterer,
+				{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 		}
+		else
+		{
+			for (i=0;i<paramsObj.location.length;i++) 
+			{
+				label(paramsObj.location[i])
+				setMarker(paramsObj.location[i])
+			}
+		}
+
+		
+		
+
 	 }
+	 
+
 	
 	map.addListener('click', function(e) 
 	{
@@ -399,82 +400,7 @@ function initAutocomplete()
 	
 
 }
-//*****
-  /** @constructor */
-      function USGSOverlay(bounds, image, map) {
 
-        // Initialize all properties.
-        this.bounds_ = bounds;
-        this.image_ = image;
-        this.map_ = map;
-
-        // Define a property to hold the image's div. We'll
-        // actually create this div upon receipt of the onAdd()
-        // method so we'll leave it null for now.
-        this.div_ = null;
-
-        // Explicitly call setMap on this overlay.
-        this.setMap(map);
-      }
-
-      /**
-       * onAdd is called when the map's panes are ready and the overlay has been
-       * added to the map.
-       */
-      USGSOverlay.prototype.onAdd = function() {
-
-        var div = document.createElement('div');
-        div.style.borderStyle = 'none';
-        div.style.borderWidth = '0px';
-        div.style.position = 'absolute';
-
-        // Create the img element and attach it to the div.
-        var img = document.createElement('img');
-        img.src = this.image_;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.position = 'absolute';
-        div.appendChild(img);
-
-        this.div_ = div;
-
-        // Add the element to the "overlayLayer" pane.
-        var panes = this.getPanes();
-        panes.overlayLayer.appendChild(div);
-      };
-
-      USGSOverlay.prototype.draw = function() {
-
-        // We use the south-west and north-east
-        // coordinates of the overlay to peg it to the correct position and size.
-        // To do this, we need to retrieve the projection from the overlay.
-        var overlayProjection = this.getProjection();
-
-        // Retrieve the south-west and north-east coordinates of this overlay
-        // in LatLngs and convert them to pixel coordinates.
-        // We'll use these coordinates to resize the div.
-        var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
-        var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
-
-        // Resize the image's div to fit the indicated dimensions.
-        var div = this.div_;
-        div.style.left = sw.x + 'px';
-        div.style.top = ne.y + 'px';
-        div.style.width = (ne.x - sw.x) + 'px';
-        div.style.height = (sw.y - ne.y) + 'px';
-      };
-
-      // The onRemove() method will be called automatically from the API if
-      // we ever set the overlay's map property to 'null'.
-      USGSOverlay.prototype.onRemove = function() {
-        this.div_.parentNode.removeChild(this.div_);
-        this.div_ = null;
-      };
-
-	  
-	  //this command or must use async defer in <script src= for run map
-      google.maps.event.addDomListener(window, 'load', initAutocomplete);
-//******
 function placeSearchMarker(loaction)
 {
 	label(loaction)
@@ -547,6 +473,12 @@ function sendMarkerList()
 
 	
 }
+
  </script>
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <!--script id = "map" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap"></script-->
+	    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkbBuVTlafh74gzZnifaEL7cglAMv_Drs&callback=initMap&language=fa&libraries=places&callback=initAutocomplete"
+         async defer></script>
   </body>
 </html>
