@@ -1,7 +1,7 @@
 package map
 {
 	import contents.TextFile;
-	import flash.sensors.Geolocation;
+	import contents.alert.Alert;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
@@ -15,8 +15,11 @@ package map
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.sensors.Geolocation;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
+	
+	import stageManager.StageManager;
 
 	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
 	public class Map extends MovieClip
@@ -136,11 +139,18 @@ package map
 		{
 			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
-				displayMapOption.viewPort = displayMapOption.fullScreenArea;	
+				
+				displayMapOption.viewPort = new Rectangle(displayMapOption.fullScreenArea.x*StageManager.stageScaleFactor(),
+					displayMapOption.fullScreenArea.y*StageManager.stageScaleFactor(),
+					displayMapOption.fullScreenArea.width*StageManager.stageScaleFactor(),
+					displayMapOption.fullScreenArea.height*StageManager.stageScaleFactor());	
 			}
 			else
 			{
-				displayMapOption.viewPort = displayMapOption.area;	
+				displayMapOption.viewPort = new Rectangle(displayMapOption.area.x*StageManager.stageScaleFactor(),
+					displayMapOption.area.y*StageManager.stageScaleFactor(),
+					displayMapOption.area.width*StageManager.stageScaleFactor(),
+					displayMapOption.area.height*StageManager.stageScaleFactor());	
 			}
 
 		}
@@ -260,7 +270,6 @@ package map
 			counter++;		
 			var _params:Object = new Object();
 				
-				
 				_params.location = Location_p;	
 
 				_params.scrollwheel = displayMapOption.scrollwheel;
@@ -290,6 +299,9 @@ package map
 				_params.imageUrl = displayMapOption.imageUrl;
 				_params.latLngBoundsImage = displayMapOption.latLngBoundsImage;
 				_params.clustering = displayMapOption.clustering;
+			//	var _pathIcon:File = File.applicationDirectory.resolvePath('Data\\markerclusterer.js'); 
+				//	Alert.show(_pathIcon.nativePath);
+				//_params.markerclusterer = _pathIcon;
 				if(displayMapOption.fullScreenArea!=null)
 				{
 					_params.fullScreenStatus=true;
@@ -315,8 +327,6 @@ package map
 			var _paramsJson:String= JSON.stringify(_params);	
 										
 			return _paramsJson;
-			
-
 		}
 		private function editSimpleButtonUrl(Url_p:String):String
 		{
@@ -330,13 +340,11 @@ package map
 					return  _pathCopy.url;
 				}
 			}
-			
 			return null;
 		}
 		
 		private function checkBack(ev:KeyboardEvent):void
 		{
-
 			if(ev.keyCode == Keyboard.BACK || ev.keyCode == Keyboard.BACKSPACE || ev.keyCode == Keyboard.PAGE_UP )
 			{
 				if(!_isHide && displayMapOption.activeBackDevice)
@@ -345,7 +353,6 @@ package map
 					ev.stopImmediatePropagation();
 					hideMap();
 				}
-
 			}
 		}
 	}
