@@ -317,11 +317,11 @@ function initAutocomplete()
 					{
 						sendMarkerListByeSeletor(paramsObj.location[i])
 					}
-						if(paramsObj.location[i].infowindow!=null)
-					{
-						infowindow.open(map, newClustererMarker);
-					}
 				});
+				if(paramsObj.location[i].infowindow!=null)
+				{
+					infowindow.open(map, newClustererMarker);
+				}
 				
 				return newClustererMarker;
         });
