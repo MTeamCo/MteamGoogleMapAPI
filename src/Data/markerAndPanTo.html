@@ -152,11 +152,12 @@ function setMarker(Marker_p)
 		{
 			sendMarkerListByeSeletor(Marker_p)
 		}
-		if(Marker_p.infowindow!=null)
-		{
-			 infowindow.open(map, marker);
-		}
 	});	
+	
+	if(Marker_p.infowindow!=null)
+	{
+		infowindow.open(map, marker);
+	}
 }
 
 
