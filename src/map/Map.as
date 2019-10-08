@@ -228,10 +228,11 @@ package map
 			
 			
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
+			//Alert.show('_path :',_path.nativePath);
 			
 			var loadHtmlByte:ByteArray = FileManager.loadFile(_path);
 			loadHtmlByte.position = 0 ;
-			trace("loadHtmlByte size : "+loadHtmlByte.length);
+			//trace("loadHtmlByte size : "+loadHtmlByte.length);
 			_htmlString = loadHtmlByte.readUTFBytes(loadHtmlByte.length);
 
 			var loc:Array = new Array();
@@ -240,14 +241,43 @@ package map
 				loc.push(displayMapOption.location[i]);
 			}
 			
-			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(loc));
+			var _html:String = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(loc));
+			
+			if(displayMapOption.clustering!=null && displayMapOption.clustering.markerclusterer!=null && displayMapOption.clustering.markerclusterer!='')
+			{
+				var markerclusterer:File = File.applicationDirectory.resolvePath(displayMapOption.clustering.markerclusterer);
+			//	Alert.show('exist :',markerclusterer.exists);
+				//Alert.show('nateivePath:',markerclusterer.nativePath);
+			//	Alert.show('url:',markerclusterer.url);
+				var clustererByte:ByteArray = FileManager.loadFile(markerclusterer);
+				clustererByte.position = 0 ;
+				var saveAddress:File = File.userDirectory.resolvePath('markerclusterer.js');
+				Alert.show('saveAddress exist:',saveAddress.exists);
+				FileManager.saveFile(saveAddress,clustererByte);
+				Alert.show('saveAddress nativePath:',saveAddress.nativePath);
+				_html = _html.split('"MARKER_CLUSTERER_JS"').join(saveAddress.nativePath);
+			}
 			_mapStage.loadString(_html);
 				
 		}
 
 		protected function reloadMap(Location_p:Array):void
 		{
-			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
+			var _html:String = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
+			if(displayMapOption.clustering!=null && displayMapOption.clustering.markerclusterer!=null && displayMapOption.clustering.markerclusterer!='')
+			{
+				var markerclusterer:File = File.applicationDirectory.resolvePath(displayMapOption.clustering.markerclusterer);
+				//	Alert.show('exist :',markerclusterer.exists);
+				//Alert.show('nateivePath:',markerclusterer.nativePath);
+				//	Alert.show('url:',markerclusterer.url);
+				var clustererByte:ByteArray = FileManager.loadFile(markerclusterer);
+				clustererByte.position = 0 ;
+				var saveAddress:File = File.userDirectory.resolvePath('markerclusterer.js');
+				Alert.show('saveAddress exist2:',saveAddress.exists);
+				FileManager.saveFile(saveAddress,clustererByte);
+				Alert.show('saveAddress nativePath2:',saveAddress.nativePath);
+				_html = _html.split('"MARKER_CLUSTERER_JS"').join(saveAddress.nativePath);			}
+			
 			if(_mapStage!=null)
 			{
 				//trace('_html :',_html)
