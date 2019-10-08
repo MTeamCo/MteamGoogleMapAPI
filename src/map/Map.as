@@ -140,17 +140,31 @@ package map
 			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
 				
-				displayMapOption.viewPort = new Rectangle(displayMapOption.fullScreenArea.x*StageManager.stageScaleFactor(),
-					displayMapOption.fullScreenArea.y*StageManager.stageScaleFactor(),
-					displayMapOption.fullScreenArea.width*StageManager.stageScaleFactor(),
-					displayMapOption.fullScreenArea.height*StageManager.stageScaleFactor());	
+				if(DevicePrefrence.isItPC)
+				{
+					displayMapOption.viewPort = new Rectangle(displayMapOption.fullScreenArea.x*StageManager.stageScaleFactor(),
+						displayMapOption.fullScreenArea.y*StageManager.stageScaleFactor(),
+						displayMapOption.fullScreenArea.width*StageManager.stageScaleFactor(),
+						displayMapOption.fullScreenArea.height*StageManager.stageScaleFactor());	
+				}
+				else
+				{
+					displayMapOption.viewPort =displayMapOption.fullScreenArea;
+				}
 			}
 			else
 			{
-				displayMapOption.viewPort = new Rectangle(displayMapOption.area.x*StageManager.stageScaleFactor(),
-					displayMapOption.area.y*StageManager.stageScaleFactor(),
-					displayMapOption.area.width*StageManager.stageScaleFactor(),
-					displayMapOption.area.height*StageManager.stageScaleFactor());	
+				if(DevicePrefrence.isItPC)
+				{
+					displayMapOption.viewPort = new Rectangle(displayMapOption.area.x*StageManager.stageScaleFactor(),
+						displayMapOption.area.y*StageManager.stageScaleFactor(),
+						displayMapOption.area.width*StageManager.stageScaleFactor(),
+						displayMapOption.area.height*StageManager.stageScaleFactor());	
+				}
+				else
+				{
+					displayMapOption.viewPort = displayMapOption.area;
+				}
 			}
 
 		}
