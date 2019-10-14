@@ -1,6 +1,8 @@
 package map
 {
 	
+	import contents.Contents;
+	
 	import flash.geom.Rectangle;
 
 	public class DisplayMapOption
@@ -16,7 +18,7 @@ package map
 		}
 			
 
-		public  var mapTypeId:String = DisplayMapOption.mapTypeId.MAP
+		public  var mapTypeId:String = DisplayMapOption.mapTypeId.MAP;
 		
 		//////////////////////////////////////////////////////////////
 		
@@ -26,27 +28,27 @@ package map
 		{
 			if(__fullscreen==null)
 			{
-				__fullscreen = new FullScreen()
+				__fullscreen = new FullScreen();
 			}
-			return __fullscreen
+			return __fullscreen;
 		}
 		
 		
 		public static var latLngBounds:LatLngBounds;
 
 		
-		public var fullscreen:String= DisplayMapOption.fullScreen.RESTORE
+		public var fullscreen:String= DisplayMapOption.fullScreen.RESTORE;
 			
-		public var fullScreenButtonStyle:ButtonStyle = new ButtonStyle('FullScreen', new Rectangle(10,120,70,30))
-		public var restoreFullScreenButtonStyle:ButtonStyle = new ButtonStyle('Restore', new Rectangle(10,120,50,30))	
+		public var fullScreenButtonStyle:ButtonStyle = new ButtonStyle('FullScreen', new Rectangle(10,120,70,30));
+		public var restoreFullScreenButtonStyle:ButtonStyle = new ButtonStyle('Restore', new Rectangle(10,120,50,30));	
 
 		///////////////////////
-		public var sendButtonLocation:ButtonStyle = new ButtonStyle('Send Loaction',new Rectangle(10,80,97,30))
-		public var sendButton:Boolean = false	
+		public var sendButtonLocation:ButtonStyle = new ButtonStyle('Send Loaction',new Rectangle(10,80,97,30));
+		public var sendButton:Boolean = false;	
 		////////////////////////
 		
 		public  var area:Rectangle,
-					fullScreenArea:Rectangle=null,
+					fullScreenArea:Rectangle = Contents.config.stageMovedRect,
 					viewPort:Rectangle;
 		
 		
@@ -54,7 +56,7 @@ package map
 		//////////////////////////
 		public var  marker:Boolean=false;
 
-		public var outLabel:Boolean=false
+		public var outLabel:Boolean=false;
 
 		public var zoomOnSelectMarker:int=-1;
 		/** value -1 is disable zoom */
@@ -64,21 +66,28 @@ package map
 					
 		public var scrollwheel:Boolean=false;
 
-		public var showAllMarker:Boolean = false
+		public var showAllMarker:Boolean = false;
 		
-		public var markerAndPanTo:Boolean = false
+		public var markerAndPanTo:Boolean = false;
 		
-		public var sendMarkerSelected:Boolean = false	
+		public var sendMarkerSelected:Boolean = false;	
 		
-		public var backToMarker:int = -1	
+		public var backToMarker:int = -1;	
 					
-		public var defaultZoom:int = 4
+		public var defaultZoom:int = 4;
 
 		public var location:Vector.<Marker>;	
 		
-		public var polyline:Boolean = false
+		public var polyline:Boolean = false;
 			
-		public var disableDefaultUI:Boolean = true
+		public var disableDefaultUI:Boolean = true;
+		public var fullscreenControl:Boolean = false;
+		public var zoomControl:Boolean = false;
+		public var mapTypeControl:Boolean = false;
+		public var scaleControl:Boolean = false;
+		public var streetViewControl:Boolean = false;
+		public var rotateControl:Boolean = false;
+		
 		public var simpleButtonUrl:String;
 		
 		public var searchBox:Boolean = false;
@@ -92,7 +101,10 @@ package map
 		 * lat2 and lng2 is north east*/
 		public var latLngBoundsImage:LatLngBounds;
 		
-		public var clustering:Clustering;
+		public var clustering:Boolean = false;
+		
+		public var markersIcon:String;
+		
 		
 		public function DisplayMapOption()
 		{
