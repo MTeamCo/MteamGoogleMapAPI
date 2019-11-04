@@ -1,9 +1,13 @@
 package map
 {
+	import com.mteamapp.gps.MyLocation;
+	
 	import contents.TextFile;
 	import contents.alert.Alert;
 	
 	import flash.desktop.NativeApplication;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
@@ -12,13 +16,16 @@ package map
 	import flash.events.KeyboardEvent;
 	import flash.events.LocationChangeEvent;
 	import flash.filesystem.File;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.net.URLVariables;
 	import flash.sensors.Geolocation;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 	import flash.utils.clearTimeout;
+	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
 	import mx.utils.Base64Encoder;
@@ -71,6 +78,9 @@ package map
 		public static var GPS:GeoLocation = new GeoLocation();					
 							
 		private var _urlObject:Object=new Object();
+		private var _visibleStatus:Boolean;
+
+		private var bitmap:Bitmap;
 		public function Map()
 		{
 		}
@@ -120,6 +130,7 @@ package map
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap);
+			
 		}
 
 		public function update(DisplayMapWindow_p:DisplayMapOption=null):void
@@ -172,6 +183,7 @@ package map
 		{
 			// TODO Auto-generated method stub
 			_movieMap.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			_movieMap.removeEventListener(Event.ENTER_FRAME,chekSliderMenu);
 		}
 		
 		protected function onAddedToStage(event:Event):void
@@ -181,12 +193,16 @@ package map
 			showMap();
 			_movieMap.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN,checkBack,false,100000);
+			if(displayMapOption.isAccesibleByMouse)
+			{
+				controlStage();
+			}
+			
 		}
 		
 		public function hideMap():void
 		{
 			// TODO Auto Generated method stub
-			trace('__mapStage :',_mapStage)
 			if(_mapStage!=null)
 			{
 				_mapStage.removeEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun);
@@ -258,21 +274,22 @@ package map
 				_html = _html.split('"MARKER_CLUSTERER_JS"').join(saveAddress.nativePath);
 			}
 
-			_mapStage.loadString(_html);	
+			_mapStage.loadString(_html);		
 		}
 					
 
 		protected function error(event:ErrorEvent):void
 		{
+			//Alert.show('errpr');
 		}
 		
 		protected function change_fun(event:LocationChangeEvent):void
 		{
+			//Alert.show('change');
 		}
 		protected function changing_fun(event:LocationChangeEvent):void
 		{
 			var _url:String = '{"loaction":'+event.location.split('{"loaction":')[1];
-			
 			if(_url!=null)
 			{	
 				_urlObject = JSON.parse(decodeURIComponent(_url));	
@@ -427,6 +444,52 @@ package map
 					hideMap();
 				}
 			}
+		}
+		
+		private function controlStage():void
+		{
+			_movieMap.addEventListener(Event.ENTER_FRAME,chekSliderMenu);
+		}
+		protected function chekSliderMenu(event:Event):void
+		{
+			
+			if(_visibleStatus!=Obj.isAccesibleByMouse(_target))
+			{
+				_visibleStatus = Obj.isAccesibleByMouse(_target);
+			/*	if(!_visibleStatus && _mapStage!=null)
+				{
+					
+					var bitmapData:BitmapData = new BitmapData(_mapStage.viewPort.width,_mapStage.viewPort.height,true,0xFF3366);
+					_mapStage.drawViewPortToBitmapData(bitmapData);
+					
+					bitmap = new Bitmap(BitmapEffects.changeSize(bitmapData,displayMapOption.area.width,displayMapOption.area.height,true,false));
+					_target.addChild( bitmap );
+					var defrentRec:Rectangle = _target.getBounds(_target.stage);
+					if(DevicePrefrence.isItPC)
+					{
+						bitmap.x = _mapStage.viewPort.x/StageManager.stageScaleFactor()-defrentRec.x;
+						bitmap.y = (_mapStage.viewPort.y/StageManager.stageScaleFactor())-defrentRec.y;	
+					}
+					else
+					{
+						bitmap.x = _mapStage.viewPort.x-defrentRec.x;
+						bitmap.y = _mapStage.viewPort.y-defrentRec.y;
+						bitmap.width = bitmap.width/StageManager.stageScaleFactor();
+						bitmap.height = bitmap.height/StageManager.stageScaleFactor();	
+					}
+					visibleMap(false);
+				
+				}
+				else if(bitmap!=null)
+				{
+					visibleMap(true);
+					_target.removeChild( bitmap );
+					bitmap = null;
+				}*/
+				
+				visibleMap(_visibleStatus);
+			}
+			
 		}
 	}
 }
