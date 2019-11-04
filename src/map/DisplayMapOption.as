@@ -105,6 +105,8 @@ package map
 		
 		public var markersIcon:String;
 		
+		public var isAccesibleByMouse:Boolean=false;;
+		
 		
 		public function DisplayMapOption()
 		{
