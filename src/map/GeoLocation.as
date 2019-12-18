@@ -2,7 +2,7 @@
 {
 	import com.mteamapp.gps.MyLocation;
 	
-
+	import contents.alert.Alert;
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
@@ -48,7 +48,6 @@
 		{
 			if (_geo != null)
 			{
-				
 				(_geo as Object).pausesLocationUpdatesAutomatically = pause;
 			}
 		}
@@ -57,15 +56,13 @@
 			if (_geo != null)
 			{
 				(_geo as Object).desiredAccuracy = Accracy;
-				
 			}
 		}
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
 		public function setup(DebugGPS_p:Boolean = true, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
-		{	
-			
-			getLocation(false);	
+		{		
+			getLocation(DebugGPS_p);	
 			_pause = pauseAutomatically;
 			_accracy = accuracy;
 		}
@@ -74,7 +71,6 @@
 			_debugGPS = DebugGPS_p;
 			if(DebugGPS_p)
 			{
-				
 				_marker = new Marker(35.700726037213926,51.39178147280688);
 				this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE));
 				this.dispatchEvent(new MapEvent(MapEvent.MARKER_ISREADY));
@@ -83,34 +79,28 @@
 			
 			if(!Geolocation.isSupported && !DebugGPS_p)
 			{
-			
 				this.dispatchEvent(new MapEvent(MapEvent.NOSUPPORTED));
 				return	;
 			}
 			this.addEventListener(Event.ENTER_FRAME,chekMarkerReady);
 			if(_geo==null)
 			{
-				
 				_geo = new Geolocation();
-			}
-			MyLocation.getGPSPermission(permissionGranted);
-			function permissionGranted():void
-			{
-				
-				if(!_geo.hasEventListener(GeolocationEvent.UPDATE))
+				MyLocation.getGPSPermission(permissionGranted);
+				function permissionGranted():void
+				{
 					_geo.addEventListener(GeolocationEvent.UPDATE, update_fun);
-				
-				if((_geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically")
-				&&
-				(_geo as Object).hasOwnProperty("desiredAccuracy"))
-				{
-					
-					(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
-					(_geo as Object).desiredAccuracy = _accracy;
-				}
-				else
-				{
-					
+					if((_geo as Object).hasOwnProperty("pausesLocationUpdatesAutomatically")
+					&&
+					(_geo as Object).hasOwnProperty("desiredAccuracy"))
+					{
+						(_geo as Object).pausesLocationUpdatesAutomatically = _pause;
+						(_geo as Object).desiredAccuracy = _accracy;
+					}
+					else
+					{
+						trace("!!!!!!! Air32+ > pausesLocationUpdatesAutomatically");
+					}
 				}
 			}
 		}
@@ -123,14 +113,11 @@
 				this.removeEventListener(Event.ENTER_FRAME,chekMarkerReady);
 				this.dispatchEvent(new MapEvent(MapEvent.MARKER_ISREADY));	
 				trace('Location is finded')
-				
 			}
 		}
 		private function update_fun(event:GeolocationEvent):void
 		{
-			
-			trace('1***********************loca******************')
-				_marker = new Marker(event.latitude,event.longitude);
+			_marker = new Marker(event.latitude,event.longitude);
 			this.dispatchEvent(new MapEvent(MapEvent.GEOLOCATION_UPDATE));
 		}
 	}
