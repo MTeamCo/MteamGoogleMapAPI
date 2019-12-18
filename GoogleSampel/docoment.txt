@@ -4,3 +4,15 @@ https://developers.google.com/maps/documentation/javascript/?csw=1
 
 نمونه دیگر از اجرای  کد های جواسکریپت و مراحل اضافه کردن کدهای دیگر
 https://developers.google.com/maps/documentation/javascript/tutorial
+
+
+
+
+ارسال دیتا از طریق url
+http://coenraets.org/blog/2011/07/flex-mobile-invoking-javascript-in-a-stagewebview/
+
+
+
+
+گرفتن دیتا از طریق url
+https://stackoverflow.com/questions/35956597/how-do-i-communicate-between-js-and-as3-in-an-air-android-application

@@ -1,9 +1,13 @@
 package map
 {
+	import com.mteamapp.gps.MyLocation;
+	
 	import contents.TextFile;
 	import contents.alert.Alert;
 	
 	import flash.desktop.NativeApplication;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
@@ -12,16 +16,24 @@ package map
 	import flash.events.KeyboardEvent;
 	import flash.events.LocationChangeEvent;
 	import flash.filesystem.File;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
+	import flash.net.URLVariables;
 	import flash.sensors.Geolocation;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
+	import flash.utils.clearTimeout;
+	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
+	
+	import mx.utils.Base64Encoder;
 	
 	import stageManager.StageManager;
 
 	[Event(name="LOAD_COMPELET",type="map.MapEvent")]
+	[Event(name="GET_MARKER_LIST",type="map.MapEvent")]
 	public class Map extends MovieClip
 	{
 		/**use scroll midel for zoom*/
@@ -65,13 +77,16 @@ package map
 							
 		public static var GPS:GeoLocation = new GeoLocation();					
 							
-					
+		private var _urlObject:Object=new Object();
+		private var _visibleStatus:Boolean;
+
+		private var bitmap:Bitmap;
 		public function Map()
 		{
 		}
 		/**
 		* @param	pauseAutomatically	for ios This would allow application developers to choose if they want to keep the geolocation services active when the application is in the background*/
-		public static function setup(dataAddress_p:String = null, htmlName_p:String = null, OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
+		public static function setup(dataAddress_p:String = null, htmlName_p:String = 'htmlData.html', OnGPS_p:Boolean = false, pauseAutomatically:Boolean = true,accuracy:String = AccuracyMode.LOCATION_ACCURACY_NEAREST_TEN_METERS):void
 		{
 			if(dataAddress_p!=null)
 			{
@@ -115,12 +130,9 @@ package map
 			_movieMap.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
 			_movieMap.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
 			_target.addChild(_movieMap);
-			addMarker();
-		}
-		protected function addMarker():void
-		{
 			
 		}
+
 		public function update(DisplayMapWindow_p:DisplayMapOption=null):void
 		{
 			if(_mapStage!=null)
@@ -139,13 +151,12 @@ package map
 		{
 			if(_fullScreen && displayMapOption.fullScreenArea!=null)
 			{
-				
 				if(DevicePrefrence.isItPC)
 				{
 					displayMapOption.viewPort = new Rectangle(displayMapOption.fullScreenArea.x*StageManager.stageScaleFactor(),
-						displayMapOption.fullScreenArea.y*StageManager.stageScaleFactor(),
-						displayMapOption.fullScreenArea.width*StageManager.stageScaleFactor(),
-						displayMapOption.fullScreenArea.height*StageManager.stageScaleFactor());	
+					displayMapOption.fullScreenArea.y*StageManager.stageScaleFactor(),
+					displayMapOption.fullScreenArea.width*StageManager.stageScaleFactor(),
+					displayMapOption.fullScreenArea.height*StageManager.stageScaleFactor());	
 				}
 				else
 				{
@@ -157,9 +168,9 @@ package map
 				if(DevicePrefrence.isItPC)
 				{
 					displayMapOption.viewPort = new Rectangle(displayMapOption.area.x*StageManager.stageScaleFactor(),
-						displayMapOption.area.y*StageManager.stageScaleFactor(),
-						displayMapOption.area.width*StageManager.stageScaleFactor(),
-						displayMapOption.area.height*StageManager.stageScaleFactor());	
+					displayMapOption.area.y*StageManager.stageScaleFactor(),
+					displayMapOption.area.width*StageManager.stageScaleFactor(),
+					displayMapOption.area.height*StageManager.stageScaleFactor());	
 				}
 				else
 				{
@@ -172,6 +183,7 @@ package map
 		{
 			// TODO Auto-generated method stub
 			_movieMap.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			_movieMap.removeEventListener(Event.ENTER_FRAME,chekSliderMenu);
 		}
 		
 		protected function onAddedToStage(event:Event):void
@@ -181,14 +193,23 @@ package map
 			showMap();
 			_movieMap.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN,checkBack,false,100000);
+			if(displayMapOption.isAccesibleByMouse)
+			{
+				controlStage();
+			}
+			
 		}
 		
 		public function hideMap():void
 		{
 			// TODO Auto Generated method stub
-			trace('__mapStage :',_mapStage)
 			if(_mapStage!=null)
 			{
+				_mapStage.removeEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun);
+				_mapStage.removeEventListener(LocationChangeEvent.LOCATION_CHANGE,change_fun);		
+				_mapStage.removeEventListener(Event.COMPLETE, onHTMLLoadComplete);
+				_mapStage.removeEventListener(ErrorEvent.ERROR,error);
+				
 				_mapStage.stage = null;
 				_mapStage.dispose();
 				_mapStage = null
@@ -209,7 +230,7 @@ package map
 			}
 		}
 				
-		protected function showMap():void
+		protected function showMap(Location_p:Array=null):void
 		{
 			_isHide = false;
 			// TODO Auto Generated method stub	
@@ -223,65 +244,105 @@ package map
 			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGING,changing_fun);
 			_mapStage.addEventListener(LocationChangeEvent.LOCATION_CHANGE,change_fun);		
 			_mapStage.addEventListener(Event.COMPLETE, onHTMLLoadComplete, false, 0, true);
-			
 			_mapStage.addEventListener(ErrorEvent.ERROR,error);
 			
 			
 			_path = File.applicationDirectory.resolvePath(dataAddress+htmlName); 
-			
 			var loadHtmlByte:ByteArray = FileManager.loadFile(_path);
 			loadHtmlByte.position = 0 ;
-			trace("loadHtmlByte size : "+loadHtmlByte.length);
 			_htmlString = loadHtmlByte.readUTFBytes(loadHtmlByte.length);
 
-			var loc:Array = new Array();
-			for(var i:int=0;i<displayMapOption.location.length;i++)
+			if(Location_p==null)
 			{
-				loc.push(displayMapOption.location[i]);
+				Location_p = new Array();
+				for(var i:int=0;i<displayMapOption.location.length;i++)
+				{
+					Location_p.push(displayMapOption.location[i]);
+				}
 			}
-			
-			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(loc));
-			_mapStage.loadString(_html);
-				
-		}
 
-		protected function reloadMap(Location_p:Array):void
-		{
-			var _html = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
-			if(_mapStage!=null)
+			
+			var _html:String = _htmlString.split('"MY_PARAM_TO_SPLIT_AND_REPLACE"').join(setLoaction(Location_p));
+			
+			if(displayMapOption.clustering)
 			{
-				//trace('_html :',_html)
-				_mapStage.loadString(_html);
+				var markerclusterer:File = File.applicationDirectory.resolvePath(dataAddress+'markerclusterer.js');
+				var clustererByte:ByteArray = FileManager.loadFile(markerclusterer);
+				clustererByte.position = 0 ;
+				var saveAddress:File = File.userDirectory.resolvePath('markerclusterer.js');
+				FileManager.saveFile(saveAddress,clustererByte);	
+				_html = _html.split('"MARKER_CLUSTERER_JS"').join(saveAddress.nativePath);
 			}
+
+			_mapStage.loadString(_html);		
 		}
+					
+
 		protected function error(event:ErrorEvent):void
 		{
-			// TODO Auto-generated method stub
-			//trace('erorrorrrrrrrrrrr :',event.text)
+			//Alert.show('errpr');
 		}
 		
 		protected function change_fun(event:LocationChangeEvent):void
 		{
-			//trace('change')
-			// TODO Auto-generated method stub
-			//trace('location change true:',event.location)
+			//Alert.show('change');
 		}
 		protected function changing_fun(event:LocationChangeEvent):void
 		{
-			// TODO Auto-generated method stub
-			//trace('location changing2222 :',event.location)
-			
-			
+			var _url:String = '{"loaction":'+event.location.split('{"loaction":')[1];
+			if(_url!=null)
+			{	
+				_urlObject = JSON.parse(decodeURIComponent(_url));	
+				
+				var _selectedMarkder:Marker=null
+					
+				if(_urlObject.seledted!=null)
+				{
+					_selectedMarkder = new Marker(_urlObject.seledted.lat,
+						_urlObject.seledted.lng,
+						_urlObject.seledted.id,
+						_urlObject.seledted.label,
+						_urlObject.seledted.title,
+						_urlObject.seledted.icon)
+				}
+				if(_fullScreen ==_urlObject.fullScreen)
+				{
+					listMarker(_urlObject.loaction);
+					this.dispatchEvent(new MapEvent(MapEvent.GET_MARKER_LIST,true,displayMapOption.location,_selectedMarkder));
+				}
+				else
+				{
+					_fullScreen = _urlObject.fullScreen;
+					setFullScreen();
+					changeFulScreen();
+				}
+				hideMap();
+				showMap(_urlObject.loaction);
+			}
+		}
+		private function listMarker(List_p:Array):void
+		{
+			displayMapOption.location = new Vector.<Marker>();
+			for each(var index:Object in List_p)
+			{
+				displayMapOption.location.push(new Marker(index.lat,
+					index.lng,
+					index.id,
+					index.label,
+					index.title,
+					index.icon,
+					index.useSetIconPath,
+					index.infowindow))
+			}
 		}
 		
 		protected function onHTMLLoadComplete(event:Event):void
 		{
-			// TODO Auto-generated method stub
-			
+			this.dispatchEvent(new MapEvent(MapEvent.LOAD_COMPELET,true,displayMapOption.location));
 		}
 		protected function setLoaction(Location_p:Array):String 
 		{
-			counter++;		
+			counter++;	
 			var _params:Object = new Object();
 				
 				_params.location = Location_p;	
@@ -301,6 +362,12 @@ package map
 				_params.simpleButtonUrl	= editSimpleButtonUrl(displayMapOption.simpleButtonUrl);
 				_params.polyline = displayMapOption.polyline;
 				_params.disableDefaultUI = displayMapOption.disableDefaultUI;	
+				_params.fullscreenControl = displayMapOption.fullscreenControl;
+				_params.zoomControl = displayMapOption.zoomControl;
+				_params.mapTypeControl = displayMapOption.mapTypeControl;
+				_params.scaleControl = displayMapOption.scaleControl;
+				_params.streetViewControl = displayMapOption.streetViewControl;
+				_params.rotateControl = displayMapOption.rotateControl;
 					
 				_params.sendBtnTitle = displayMapOption.sendButtonLocation.title;
 				_params.sendBtnWidth = displayMapOption.sendButtonLocation.position.width;
@@ -313,12 +380,21 @@ package map
 				_params.imageUrl = displayMapOption.imageUrl;
 				_params.latLngBoundsImage = displayMapOption.latLngBoundsImage;
 				_params.clustering = displayMapOption.clustering;
-			//	var _pathIcon:File = File.applicationDirectory.resolvePath('Data\\markerclusterer.js'); 
-				//	Alert.show(_pathIcon.nativePath);
-				//_params.markerclusterer = _pathIcon;
+				
+				
+				if(displayMapOption.markersIcon!='' && displayMapOption.markersIcon!=null && displayMapOption.markersIcon.indexOf('data:')==-1)
+				{
+					var _pathIcon:File = File.applicationDirectory.resolvePath(displayMapOption.markersIcon); 
+					var iconBytArray:ByteArray = FileManager.loadFile(_pathIcon);
+					iconBytArray.position = 0;
+					var b64:Base64Encoder = new Base64Encoder();
+					b64.encodeBytes(iconBytArray);
+					_params.markersIcon  = 'data: image/'+_pathIcon.extension+';base64,'+b64.toString();
+				}
+				
+
 				if(displayMapOption.fullScreenArea!=null)
 				{
-					_params.fullScreenStatus=true;
 					if(!_fullScreen)
 					{
 						_params.fullScreenBtnStyleWidth = displayMapOption.fullScreenButtonStyle.position.width;
@@ -368,6 +444,52 @@ package map
 					hideMap();
 				}
 			}
+		}
+		
+		private function controlStage():void
+		{
+			_movieMap.addEventListener(Event.ENTER_FRAME,chekSliderMenu);
+		}
+		protected function chekSliderMenu(event:Event):void
+		{
+			
+			if(_visibleStatus!=Obj.isAccesibleByMouse(_target))
+			{
+				_visibleStatus = Obj.isAccesibleByMouse(_target);
+			/*	if(!_visibleStatus && _mapStage!=null)
+				{
+					
+					var bitmapData:BitmapData = new BitmapData(_mapStage.viewPort.width,_mapStage.viewPort.height,true,0xFF3366);
+					_mapStage.drawViewPortToBitmapData(bitmapData);
+					
+					bitmap = new Bitmap(BitmapEffects.changeSize(bitmapData,displayMapOption.area.width,displayMapOption.area.height,true,false));
+					_target.addChild( bitmap );
+					var defrentRec:Rectangle = _target.getBounds(_target.stage);
+					if(DevicePrefrence.isItPC)
+					{
+						bitmap.x = _mapStage.viewPort.x/StageManager.stageScaleFactor()-defrentRec.x;
+						bitmap.y = (_mapStage.viewPort.y/StageManager.stageScaleFactor())-defrentRec.y;	
+					}
+					else
+					{
+						bitmap.x = _mapStage.viewPort.x-defrentRec.x;
+						bitmap.y = _mapStage.viewPort.y-defrentRec.y;
+						bitmap.width = bitmap.width/StageManager.stageScaleFactor();
+						bitmap.height = bitmap.height/StageManager.stageScaleFactor();	
+					}
+					visibleMap(false);
+				
+				}
+				else if(bitmap!=null)
+				{
+					visibleMap(true);
+					_target.removeChild( bitmap );
+					bitmap = null;
+				}*/
+				
+				visibleMap(_visibleStatus);
+			}
+			
 		}
 	}
 }
