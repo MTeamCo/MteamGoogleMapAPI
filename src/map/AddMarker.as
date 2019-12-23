@@ -10,7 +10,7 @@ package map
 	import flash.text.ReturnKeyLabel;
 
 
-	public class AddMarker extends Map
+	public class AddMarker extends Map 
 	{
 		private var _urlObject:Object=new Object();
 		
