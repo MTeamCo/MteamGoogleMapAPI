@@ -10,7 +10,8 @@ package map
 							GEOLOCATION_UPDATE:String = "GEOLOCATION_UPDATE",
 							NOSUPPORTED:String = "NOSUPPORTED",
 							MARKER_ISREADY:String="MARKER_ISREADY",
-							GPS_NO_ACTIVE:String = "GPS_NO_ACTIVE";
+							GPS_NO_ACTIVE:String = "GPS_NO_ACTIVE",
+							GPS_ACTIVE:String = "GPS_ACTIVE";
 		
 
 		
